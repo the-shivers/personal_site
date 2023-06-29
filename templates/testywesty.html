@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Random Data Page</title>
+</head>
+<body>
+    <h1>Random Data Page</h1>
+    <button id="updateButton">Update Paragraph</button>
+    <p id="dataParagraph">Click the button to load random data.</p>
+
+    <script>
+        const updateButton = document.getElementById('updateButton');
+        const dataParagraph = document.getElementById('dataParagraph');
+
+        updateButton.addEventListener('click', () => {
+            fetch('/data')
+                .then(response => response.json())
+                .then(data => {
+                    // Generate a random index
+                    const randomIndex = Math.floor(Math.random() * data.length);
+
+                    // Get the random row from the data
+                    const randomRow = data[randomIndex];
+
+                    // Update the paragraph with the random row
+                    dataParagraph.textContent = JSON.stringify(randomRow);
+                })
+                .catch(error => console.error(error));
+        });
+    </script>
+</body>
+</html>
+
