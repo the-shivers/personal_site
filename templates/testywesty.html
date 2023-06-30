@@ -2,12 +2,6 @@
 <html>
 <head>
     <title>Random Data Page</title>
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vexflow/1.2.90/vexflow-min.js"></script>
-    <script src="https://rawgit.com/0xfe/vexchords/master/releases/vexchords-min.js"></script> -->
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.min.js"></script> -->
-    
-    <!-- <script src="/static/vexchords.dev.js"></script> -->
-    <!-- <script type="module" src="/static/chordbox.js"></script> -->
     <script type="module" src="/static/main.js"></script>
 </head>
 <body>
@@ -16,33 +10,33 @@
     <p id="dataParagraph">Click the button to load random data.</p>
 
     <script>
-        // Declare a variable to hold your data
-        let data;
-        fetch('/data')
-        .then(response => response.json())
-        .then(fetchedData => {
-            // Store the fetched data
-            data = fetchedData;
-        })
-        .catch(error => console.error(error));
+        // // Declare a variable to hold your data
+        // let data;
+        // fetch('/data')
+        // .then(response => response.json())
+        // .then(fetchedData => {
+        //     // Store the fetched data
+        //     data = fetchedData;
+        // })
+        // .catch(error => console.error(error));
 
-        const updateButton = document.getElementById('updateButton');
-        const dataParagraph = document.getElementById('dataParagraph');
+        // const updateButton = document.getElementById('updateButton');
+        // const dataParagraph = document.getElementById('dataParagraph');
 
-        updateButton.addEventListener('click', () => {
-        // Check if data has been fetched
-        if (data) {
-            // Generate a random index
-            const randomIndex = Math.floor(Math.random() * data.length);
-            // Get the random row from the data
-            const randomRow = data[randomIndex];
-            // Update the paragraph with the random row
-            dataParagraph.textContent = JSON.stringify(randomRow);
-        } else {
-            // If data has not yet been fetched, display an error message
-            dataParagraph.textContent = "Data not yet loaded. Please try again in a few seconds.";
-        }
-        });
+        // updateButton.addEventListener('click', () => {
+        // // Check if data has been fetched
+        // if (data) {
+        //     // Generate a random index
+        //     const randomIndex = Math.floor(Math.random() * data.length);
+        //     // Get the random row from the data
+        //     const randomRow = data[randomIndex];
+        //     // Update the paragraph with the random row
+        //     dataParagraph.textContent = JSON.stringify(randomRow);
+        // } else {
+        //     // If data has not yet been fetched, display an error message
+        //     dataParagraph.textContent = "Data not yet loaded. Please try again in a few seconds.";
+        // }
+        // });
     </script>
 
     <div id="drawing" style="text-align: center;"></div>

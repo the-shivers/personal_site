@@ -573,51 +573,87 @@ strums_table_schema = """
 cursor.execute(f'DROP TABLE IF EXISTS {strums_table_name}')
 cursor.execute(f'CREATE TABLE IF NOT EXISTS {strums_table_name} ({strums_table_schema})')
 starter_data = cursor.execute(strums_table_starter_query).fetchall()
+my_data = [d for d in starter_data if d[1] == 0 and d[2] == 0 and d[3] == 0 and d[4] == 0]
 
+# def test(i, chords):
+#     values = [
+#         i, 
+#         starter_data[i][0], 
+#         starter_data[i][5],
+#         ",".join([
+#             note_add_abs(starter_data[i][7], starter_data[i][1]) if starter_data[i][1] >= 0 else '',
+#             note_add_abs(starter_data[i][8], starter_data[i][2]) if starter_data[i][2] >= 0 else '',
+#             note_add_abs(starter_data[i][9], starter_data[i][3]) if starter_data[i][3] >= 0 else '',
+#             note_add_abs(starter_data[i][10], starter_data[i][4]) if starter_data[i][3] >= 0 else ''
+#         ]),
+#         note_add_abs(starter_data[i][7], starter_data[i][1]) if starter_data[i][1] >= 0 else '',
+#         note_add_abs(starter_data[i][8], starter_data[i][2]) if starter_data[i][2] >= 0 else '',
+#         note_add_abs(starter_data[i][9], starter_data[i][3]) if starter_data[i][3] >= 0 else '',
+#         note_add_abs(starter_data[i][10], starter_data[i][4]) if starter_data[i][3] >= 0 else '',
+#         ",".join(sorted(list(set([x for x in [
+#             get_rel_note(note_add_abs(starter_data[i][7], starter_data[i][1])) if starter_data[i][1] >= 0 else '',
+#             get_rel_note(note_add_abs(starter_data[i][8], starter_data[i][2])) if starter_data[i][2] >= 0 else '',
+#             get_rel_note(note_add_abs(starter_data[i][9], starter_data[i][3])) if starter_data[i][3] >= 0 else '',
+#             get_rel_note(note_add_abs(starter_data[i][10], starter_data[i][4])) if starter_data[i][3] >= 0 else ''
+#         ] if x])))),
+#         get_rel_note(note_add_abs(starter_data[i][7], starter_data[i][1])) if starter_data[i][1] >= 0 else '',
+#         get_rel_note(note_add_abs(starter_data[i][8], starter_data[i][2])) if starter_data[i][2] >= 0 else '',
+#         get_rel_note(note_add_abs(starter_data[i][9], starter_data[i][3])) if starter_data[i][3] >= 0 else '',
+#         get_rel_note(note_add_abs(starter_data[i][10], starter_data[i][4])) if starter_data[i][3] >= 0 else ''
+#     ]
+#     filtered_chords = [chord for chord in chords if chord[3] == values[8]]  
+#     return (values[8], filtered_chords)
+
+# chords = cursor.execute('select * from chords').fetchall()
+# test(10, chords)
+
+counter = 0
+# starter_data = my_data
 for i in range(len(starter_data)):
     placeholders = '?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?'
     values = [
-        i, 
         starter_data[i][0], 
         starter_data[i][5],
         ",".join([
             note_add_abs(starter_data[i][7], starter_data[i][1]) if starter_data[i][1] >= 0 else '',
             note_add_abs(starter_data[i][8], starter_data[i][2]) if starter_data[i][2] >= 0 else '',
             note_add_abs(starter_data[i][9], starter_data[i][3]) if starter_data[i][3] >= 0 else '',
-            note_add_abs(starter_data[i][10], starter_data[i][4]) if starter_data[i][3] >= 0 else ''
+            note_add_abs(starter_data[i][10], starter_data[i][4]) if starter_data[i][4] >= 0 else ''
         ]),
         note_add_abs(starter_data[i][7], starter_data[i][1]) if starter_data[i][1] >= 0 else '',
         note_add_abs(starter_data[i][8], starter_data[i][2]) if starter_data[i][2] >= 0 else '',
         note_add_abs(starter_data[i][9], starter_data[i][3]) if starter_data[i][3] >= 0 else '',
-        note_add_abs(starter_data[i][10], starter_data[i][4]) if starter_data[i][3] >= 0 else '',
+        note_add_abs(starter_data[i][10], starter_data[i][4]) if starter_data[i][4] >= 0 else '',
         ",".join(sorted(list(set([x for x in [
             get_rel_note(note_add_abs(starter_data[i][7], starter_data[i][1])) if starter_data[i][1] >= 0 else '',
             get_rel_note(note_add_abs(starter_data[i][8], starter_data[i][2])) if starter_data[i][2] >= 0 else '',
             get_rel_note(note_add_abs(starter_data[i][9], starter_data[i][3])) if starter_data[i][3] >= 0 else '',
-            get_rel_note(note_add_abs(starter_data[i][10], starter_data[i][4])) if starter_data[i][3] >= 0 else ''
+            get_rel_note(note_add_abs(starter_data[i][10], starter_data[i][4])) if starter_data[i][4] >= 0 else ''
         ] if x])))),
         get_rel_note(note_add_abs(starter_data[i][7], starter_data[i][1])) if starter_data[i][1] >= 0 else '',
         get_rel_note(note_add_abs(starter_data[i][8], starter_data[i][2])) if starter_data[i][2] >= 0 else '',
         get_rel_note(note_add_abs(starter_data[i][9], starter_data[i][3])) if starter_data[i][3] >= 0 else '',
-        get_rel_note(note_add_abs(starter_data[i][10], starter_data[i][4])) if starter_data[i][3] >= 0 else ''
+        get_rel_note(note_add_abs(starter_data[i][10], starter_data[i][4])) if starter_data[i][4] >= 0 else ''
     ]
     chords = cursor.execute('select * from chords').fetchall()
-    filtered_chords = [chord for chord in chords if chord[3] == values[8]]
+    filtered_chords = [chord for chord in chords if chord[5] == values[7]]
     if filtered_chords:
-        for j in filtered_chords:
-            new_vals = [filtered_chords[j][0], filtered_chords[j][1], filtered_chords[j][2]]
+        for chord in filtered_chords:
+            new_vals = [chord[0], chord[2], chord[4]]
             cursor.execute(
                 f'INSERT INTO {strums_table_name} \
                 (id, fingering_id, tuning_id, abs_note_str, abs_note1, abs_note2, abs_note3, abs_note4, rel_note_str, rel_note1, rel_note2, rel_note3, rel_note4, chord_id, root_note, chord_type) \
-                VALUES ({placeholders})', values + new_vals
+                VALUES ({placeholders})', [counter] + values + new_vals
             )
+            counter += 1
     else:
         new_vals = ['', '', '']
         cursor.execute(
-                f'INSERT INTO {strums_table_name} \
-                (id, fingering_id, tuning_id, abs_note_str, abs_note1, abs_note2, abs_note3, abs_note4, rel_note_str, rel_note1, rel_note2, rel_note3, rel_note4, chord_id, root_note, chord_type) \
-                VALUES ({placeholders})', values + new_vals
-            )
+            f'INSERT INTO {strums_table_name} \
+            (id, fingering_id, tuning_id, abs_note_str, abs_note1, abs_note2, abs_note3, abs_note4, rel_note_str, rel_note1, rel_note2, rel_note3, rel_note4, chord_id, root_note, chord_type) \
+            VALUES ({placeholders})', [counter] + values + new_vals
+        )
+        counter += 1
 
 conn.commit()
 conn.close()

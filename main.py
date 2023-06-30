@@ -21,11 +21,11 @@ async def get_data():
 
     # Execute a SELECT query
     cursor.execute(
-        "SELECT s.*, f.fret_stretch, f.fret_max, f.fret_sum \
+        "SELECT s.*, f.fret_stretch, f.fret_max, f.fret_sum, f.f1, f.f2, f.f3, f.f4 \
         FROM strums s \
         JOIN fingerings f \
             ON s.fingering_id = f.id \
-        WHERE fret_max < 4 AND fret_stretch <= 4 AND tuning_id = 1"
+        WHERE fret_max < 4 AND fret_stretch <= 4 AND tuning_id = 1 AND chord_id <> ''"
         )
     rows = cursor.fetchall()
 
