@@ -5,7 +5,7 @@
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vexflow/1.2.90/vexflow-min.js"></script>
     <script src="https://rawgit.com/0xfe/vexchords/master/releases/vexchords-min.js"></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.min.js"></script>
-    <script src="vexchords.dev.js"></script>
+    <script src="/static/vexchords.dev.js"></script>
 </head>
 <body>
     <h1>Random Data Page</h1>
@@ -15,7 +15,6 @@
     <script>
         const updateButton = document.getElementById('updateButton');
         const dataParagraph = document.getElementById('dataParagraph');
-
         updateButton.addEventListener('click', () => {
             fetch('/data')
                 .then(response => response.json())
@@ -33,121 +32,22 @@
                 .catch(error => console.error(error));
         });
     </script>
-    <div id="chord"></div>
+
+    <canvas id='canvas'></canvas>
     <script>
-        const ChordBox = vexchords.ChordBox;
-        const chordChart = [
-        {
-            section: 'Open Chords',
-            description:
-            'These chords are played in open position, and generally ' +
-            'include open strings.',
-            chords: [
-                {
-                    name: 'C Major',
-                    chord: [[1, 0], [2, 1, '1'], [3, 0], [4, 2, 2], [5, 3, 3]],
-                    position: 0,
-                    barres: []
-                },
-                {
-                    name: 'D Major',
-                    chord: [
-                        [1, 2, 2],
-                        [2, 3, 3],
-                        [3, 2, '1'],
-                        [4, 0, 'D'],
-                        [5, 'x'],
-                        [6, 'x']
-                    ],
-                    position: 0,
-                    barres: []
-                },
-                {
-                    name: 'E7',
-                    chord: [
-                        [1, 0],
-                        [2, 3, 4],
-                        [3, 1, 1],
-                        [4, 0],
-                        [5, 2, 2],
-                        [6, 0, 'E']
-                    ],
-                    position: 0,
-                    barres: []
-                }
-            ]
-        }
-        ];
-        const chords = [];
+        // Initialize a new chord chart
+        var ctx = document.getElementById('canvas').getContext('2d');
+        ctx.canvas.width  = 100;
+        ctx.canvas.height = 120;
+        const ukeChord = new Vex.Flow.UkuleleChord(ctx);
 
-        function createChordElement(chordStruct) {
-        const chordbox = $('<div>').addClass('chord');
-        const chordcanvas = $('<div>');
-        const chordname = $('<div>').addClass('chordname');
+        // Define the chord 
+        var chord = ["A", "E", "C#", "A"];
 
-        chordbox.append(chordcanvas);
-        chordbox.append(chordname);
-        chordname.append(chordStruct.name);
-
-        chords.push({
-            el: chordcanvas[0],
-            struct: chordStruct
-        });
-
-        return chordbox;
-        }
-
-        function createSectionElement(sectionStruct) {
-        const section = $('<div>').addClass('section');
-        const sectionTitle = $('<div>').addClass('title');
-        const sectionDesc = $('<div>').addClass('description');
-
-        section.append(sectionTitle);
-        section.append(sectionDesc);
-        sectionTitle.append(sectionStruct.section);
-        sectionDesc.append(sectionStruct.description);
-
-        return section;
-        }
-
-        function createShapeChart(keys, container, shapes, shape) {
-        for (let i = 0; i < keys.length; i += 1) {
-            const key = keys[i];
-            const section = createSectionElement({
-            section: `${key} Chords (${shape} Shape)`,
-            description: `${shape}-Shaped barre chords in the key of ${key}.`
-            });
-
-            for (let j = 0; j < shapes.length; j += 1) {
-            const chordElem = createChordElement(
-                vexchords.build(key, shape, shapes[j])
-            );
-            section.append(chordElem);
-            }
-
-            container.append(section);
-        }
-        console.log(container)
-        }
-
-        function init() {
-            var container = $('#container');
-
-            // Display preset chords (open chords)
-            for (var i = 0; i < chordChart.length; ++i) {
-                var section_struct = chordChart[i];
-                var section = createSectionElement(section_struct);
-
-                for (var j = 0; j < section_struct.chords.length; ++j) {
-                section.append(createChordElement(section_struct.chords[j]));
-                }
-                container.append(section);
-            }
-        }
-        $(function() {
-        init();
-        });
+        // Draw the chord chart
+        ukeChord.draw({chord: chord});
     </script>
+    
 </body>
 </html>
 
