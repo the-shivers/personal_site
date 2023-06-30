@@ -5,14 +5,17 @@
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vexflow/1.2.90/vexflow-min.js"></script>
     <script src="https://rawgit.com/0xfe/vexchords/master/releases/vexchords-min.js"></script> -->
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.min.js"></script> -->
-    <script src="/static/vexchords.dev.js"></script>
+    
+    <!-- <script src="/static/vexchords.dev.js"></script> -->
+    <!-- <script type="module" src="/static/chordbox.js"></script> -->
+    <script type="module" src="/static/main.js"></script>
 </head>
 <body>
     <h1>Random Data Page</h1>
     <button id="updateButton">Update Paragraph</button>
     <p id="dataParagraph">Click the button to load random data.</p>
 
-    <script>
+    <!-- <script>
         const updateButton = document.getElementById('updateButton');
         const dataParagraph = document.getElementById('dataParagraph');
         updateButton.addEventListener('click', () => {
@@ -31,61 +34,64 @@
                 })
                 .catch(error => console.error(error));
         });
-    </script>
+    </script> -->
 
-<div id="drawing" style="text-align: center;"></div>
-<div id="drawing2" style="text-align: center;"></div>
+    <div id="drawing" style="text-align: center;"></div>
+    <div id="drawing2" style="text-align: center;"></div>
     <script>
-      const sel = document.getElementById('drawing');
-      const draw = vexchords.draw;
+    //     const sel = document.getElementById('drawing');
+      
+    //     function draw(sel, chord, opts) {
+    //         return new ChordBox(sel, opts).draw(chord);
+    //     }
 
-      // 7 string
-      draw(
-        sel,
-        {
-          chord: [[1, 2], [2, 1], [3, 2], [4, 0], [5, 'x'], [6, 'x'], [7, 1]],
-          tuning: ['B', 'E', 'A', 'D', 'G', 'B', 'E']
-        },
-        { numStrings: 7 }
-      );
+    //   // 7 string
+    //   draw(
+    //     sel,
+    //     {
+    //       chord: [[1, 2], [2, 1], [3, 2], [4, 0], [5, 'x'], [6, 'x'], [7, 1]],
+    //       tuning: ['B', 'E', 'A', 'D', 'G', 'B', 'E']
+    //     },
+    //     { numStrings: 7 }
+    //   );
 
-      // Stretch chord
-      draw(
-        sel,
-        {
-          chord: [[3, 3], [4, 5], [5, 7], [6, 'x']],
-          position: 5,
-          barres: [{ fromString: 6, toString: 1, fret: 1 }]
-        },
-        { height: 140, numFrets: 8, strokeColor: '#8a8' }
-      );
+    //   // Stretch chord
+    //   draw(
+    //     sel,
+    //     {
+    //       chord: [[3, 3], [4, 5], [5, 7], [6, 'x']],
+    //       position: 5,
+    //       barres: [{ fromString: 6, toString: 1, fret: 1 }]
+    //     },
+    //     { height: 140, numFrets: 8, strokeColor: '#8a8' }
+    //   );
 
-      // Big
-      draw(
-        '#drawing2',
-        {
-          chord: [[1, 2, 2], [2, 1, 1], [3, 2, 3], [4, 0], [5, 'x'], [6, 'x']]
-        },
-        { width: 180, height: 220, defaultColor: '#745' }
-      );
+    //   // Big
+    //   draw(
+    //     '#drawing2',
+    //     {
+    //       chord: [[1, 2, 2], [2, 1, 1], [3, 2, 3], [4, 0], [5, 'x'], [6, 'x']]
+    //     },
+    //     { width: 180, height: 220, defaultColor: '#745' }
+    //   );
 
-      // Bass
-      draw(
-        '#drawing2',
-        {
-          chord: [[1, 3, 'F#'], [2, 3, 'D'], [3, 3, 'A'], [4, 3]],
-          tuning: ['G', 'C', 'E', 'A']
-        },
-        {
-          width: 180,
-          height: 220,
-          numStrings: 4,
-          defaultColor: '#37a',
-          strokeWidth: 2,
-          fretWidth: 2,
-          fontWeight: 'normal'
-        }
-      );
+    //   // Bass
+    //   draw(
+    //     '#drawing2',
+    //     {
+    //       chord: [[1, 3, 'F#'], [2, 3, 'D'], [3, 3, 'A'], [4, 3]],
+    //       tuning: ['G', 'C', 'E', 'A']
+    //     },
+    //     {
+    //       width: 180,
+    //       height: 220,
+    //       numStrings: 4,
+    //       defaultColor: '#37a',
+    //       strokeWidth: 2,
+    //       fretWidth: 2,
+    //       fontWeight: 'normal'
+    //     }
+    //   );
 
     </script>
 
