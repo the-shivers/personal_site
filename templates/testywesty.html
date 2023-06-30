@@ -15,85 +15,37 @@
     <button id="updateButton">Update Paragraph</button>
     <p id="dataParagraph">Click the button to load random data.</p>
 
-    <!-- <script>
+    <script>
+        // Declare a variable to hold your data
+        let data;
+        fetch('/data')
+        .then(response => response.json())
+        .then(fetchedData => {
+            // Store the fetched data
+            data = fetchedData;
+        })
+        .catch(error => console.error(error));
+
         const updateButton = document.getElementById('updateButton');
         const dataParagraph = document.getElementById('dataParagraph');
+
         updateButton.addEventListener('click', () => {
-            fetch('/data')
-                .then(response => response.json())
-                .then(data => {
-                    // // Generate a random index
-                    const randomIndex = Math.floor(Math.random() * data.length);
-
-                    // // Get the random row from the data
-                    const randomRow = data[randomIndex];
-
-                    // // Update the paragraph with the random row
-                    dataParagraph.textContent = JSON.stringify(randomRow);
-                    // dataParagraph.textContent = data;
-                })
-                .catch(error => console.error(error));
+        // Check if data has been fetched
+        if (data) {
+            // Generate a random index
+            const randomIndex = Math.floor(Math.random() * data.length);
+            // Get the random row from the data
+            const randomRow = data[randomIndex];
+            // Update the paragraph with the random row
+            dataParagraph.textContent = JSON.stringify(randomRow);
+        } else {
+            // If data has not yet been fetched, display an error message
+            dataParagraph.textContent = "Data not yet loaded. Please try again in a few seconds.";
+        }
         });
-    </script> -->
+    </script>
 
     <div id="drawing" style="text-align: center;"></div>
-    <div id="drawing2" style="text-align: center;"></div>
-    <script>
-    //     const sel = document.getElementById('drawing');
-      
-    //     function draw(sel, chord, opts) {
-    //         return new ChordBox(sel, opts).draw(chord);
-    //     }
-
-    //   // 7 string
-    //   draw(
-    //     sel,
-    //     {
-    //       chord: [[1, 2], [2, 1], [3, 2], [4, 0], [5, 'x'], [6, 'x'], [7, 1]],
-    //       tuning: ['B', 'E', 'A', 'D', 'G', 'B', 'E']
-    //     },
-    //     { numStrings: 7 }
-    //   );
-
-    //   // Stretch chord
-    //   draw(
-    //     sel,
-    //     {
-    //       chord: [[3, 3], [4, 5], [5, 7], [6, 'x']],
-    //       position: 5,
-    //       barres: [{ fromString: 6, toString: 1, fret: 1 }]
-    //     },
-    //     { height: 140, numFrets: 8, strokeColor: '#8a8' }
-    //   );
-
-    //   // Big
-    //   draw(
-    //     '#drawing2',
-    //     {
-    //       chord: [[1, 2, 2], [2, 1, 1], [3, 2, 3], [4, 0], [5, 'x'], [6, 'x']]
-    //     },
-    //     { width: 180, height: 220, defaultColor: '#745' }
-    //   );
-
-    //   // Bass
-    //   draw(
-    //     '#drawing2',
-    //     {
-    //       chord: [[1, 3, 'F#'], [2, 3, 'D'], [3, 3, 'A'], [4, 3]],
-    //       tuning: ['G', 'C', 'E', 'A']
-    //     },
-    //     {
-    //       width: 180,
-    //       height: 220,
-    //       numStrings: 4,
-    //       defaultColor: '#37a',
-    //       strokeWidth: 2,
-    //       fretWidth: 2,
-    //       fontWeight: 'normal'
-    //     }
-    //   );
-
-    </script>
 
   </body>
 </html>
