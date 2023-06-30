@@ -35,17 +35,23 @@
 
     <canvas id='canvas'></canvas>
     <script>
-        // Initialize a new chord chart
-        var ctx = document.getElementById('canvas').getContext('2d');
-        ctx.canvas.width  = 100;
-        ctx.canvas.height = 120;
-        const ukeChord = new Vex.Flow.UkuleleChord(ctx);
+        window.onload = function() {
+            var canvas = document.getElementById('canvas');
+            var context = canvas.getContext('2d');
+            context.canvas.width  = 100;
+            context.canvas.height = 120;
 
-        // Define the chord 
-        var chord = ["A", "E", "C#", "A"];
+            var chordBox = new vexchords.ChordBox(context, {width: context.canvas.width, height: context.canvas.height});
 
-        // Draw the chord chart
-        ukeChord.draw({chord: chord});
+            var chordShape = {
+              name: 'A Major',
+              positions: ['-', '1', '0', '2', '0'],
+              fingers: ['-', '1', '0', '2', '0'],
+            };
+
+            chordBox.setChordShape(chordShape);
+            chordBox.draw();
+        }
     </script>
 
 </body>
