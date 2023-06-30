@@ -8,6 +8,18 @@ app = FastAPI()
 app.mount("/static", StaticFiles(directory="/root/personal_site/static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
+origins = [
+    "http://localhost:3000",
+    "localhost:3000"
+]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
+
 @app.get("/nice-text")
 async def nice_text(request: Request):
     return templates.TemplateResponse("nice_text.html", {"request": request})
