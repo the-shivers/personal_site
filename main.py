@@ -9,20 +9,6 @@ app = FastAPI()
 app.mount("/static", StaticFiles(directory="/root/personal_site/static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
-origins = [
-    "http://localhost:8203",
-    "https://localhost:8203",
-    "localhost:8203"
-]
-app.add_middleware(
-    CORSMiddleware,
-    # allow_origins=origins,
-    allow_origins=['*'],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"]
-)
-
 @app.get("/nice-text")
 async def nice_text(request: Request):
     return templates.TemplateResponse("nice_text.html", {"request": request})
@@ -34,7 +20,13 @@ async def get_data():
     cursor = conn.cursor()
 
     # Execute a SELECT query
-    cursor.execute("SELECT * FROM chords")
+    cursor.execute(
+        "SELECT s.*, f.fret_stretch, f.fret_max, f.fret_sum \
+        FROM strums s \
+        JOIN fingerings f \
+            ON s.fingering_id = f.id \
+        WHERE fret_max < 4 AND fret_stretch <= 4 AND tuning_id = 1"
+        )
     rows = cursor.fetchall()
 
     # Close the database connection
