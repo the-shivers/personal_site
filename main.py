@@ -13,16 +13,15 @@ async def nice_text(request: Request):
 @app.get("/data")
 async def get_data():
     # Create/connect to the SQLite database
-    conn = sqlite3.connect('database.db')
+    conn = sqlite3.connect('chords.db')
     cursor = conn.cursor()
 
     # Execute a SELECT query
-    cursor.execute("SELECT * FROM my_table")
+    cursor.execute("SELECT * FROM chords")
     rows = cursor.fetchall()
 
     # Close the database connection
     conn.close()
-
     return rows
 
 @app.get("/testywesty")
