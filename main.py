@@ -17,7 +17,7 @@ async def get_data():
     cursor = conn.cursor()
 
     # Execute a SELECT query
-    cursor.execute("SELECT * FROM chords")
+    cursor.execute("SELECT count(*) FROM chords")
     rows = cursor.fetchall()
 
     # Close the database connection
