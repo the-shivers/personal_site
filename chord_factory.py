@@ -9,8 +9,8 @@ OCTAVES = 8
 ABS_NOTES = [note + str(i) for i in range(1, 1 + OCTAVES) for note in NOTES]
 ABS_NOTES_LEN = len(ABS_NOTES)
 ABS_NOTES_DICT = dict(zip(ABS_NOTES, range(ABS_NOTES_LEN)))
-MAX_FRET = 16
-MAX_STRETCH = 7
+MAX_FRET = 20
+MAX_STRETCH = 10
 CHORD_TYPES = [
     # four basic triads
     {
@@ -184,11 +184,6 @@ CHORD_TYPES = [
         "ints": [0, 4, 7, 10, 14, 18]
     },
     {
-        "type": "major_9_sharp_11",
-        "abbrv": "Maj9#11",
-        "ints": [0, 4, 7, 11, 14, 18]
-    },
-    {
         "type": "dominant_13_sharp_11",
         "abbrv": "13#11",
         "ints": [0, 4, 7, 10, 14, 18, 21]
@@ -233,11 +228,6 @@ CHORD_TYPES = [
         "type": "maj7_sharp_11",
         "abbrv": "Maj7#11",
         "ints": [0, 4, 7, 11, 18]
-    },
-    {
-        "type": "half_diminished_minor_9",
-        "abbrv": "øm9",
-        "ints": [0, 3, 6, 10, 14]
     },
     {
         "type": "augmented_major_9",
@@ -291,11 +281,6 @@ CHORD_TYPES = [
         "ints": [0, 4, 7, 14]
     },
     {
-        "type": "add6",
-        "abbrv": "add6",
-        "ints": [0, 4, 7, 9]
-    },
-    {
         "type": "minor_add2",
         "abbrv": "madd2",
         "ints": [0, 2, 3, 7]
@@ -311,11 +296,6 @@ CHORD_TYPES = [
         "ints": [0, 3, 7, 14]
     },
     {
-        "type": "minor_add6",
-        "abbrv": "madd6",
-        "ints": [0, 3, 7, 9]
-    },
-    {
         "type": "dominant_7_add11",
         "abbrv": "7add11",
         "ints": [0, 4, 7, 10, 17]
@@ -329,7 +309,7 @@ CHORD_TYPES = [
         "type": "dominant_7_add_6",
         "abbrv": "7/6",
         "ints": [0, 4, 7, 9, 10]
-    }
+    },
     {
         "type": "major_7_add11",
         "abbrv": "Maj7add11",
@@ -339,16 +319,6 @@ CHORD_TYPES = [
         "type": "major_7_add13",
         "abbrv": "Maj7add13",
         "ints": [0, 4, 7, 11, 21]
-    },
-    {
-        "type": "major_7_add_9",
-        "abbrv": "Maj7add9",
-        "ints": [0, 4, 7, 11, 14]
-    },
-    {
-        "type": "minor_7_add_9",
-        "abbrv": "m7add9",
-        "ints": [0, 3, 7, 10, 14]
     }
 ]
 
@@ -437,7 +407,7 @@ chord_types_table_schema = """
     id INTEGER PRIMARY KEY,
     type TEXT NOT NULL UNIQUE,
     abbrv TEXT NOT NULL UNIQUE,
-    int_str TEXT NOT NULL UNIQUE
+    int_str TEXT NOT NULL
 """
 cursor.execute(f'DROP TABLE IF EXISTS {chord_types_table_name}')
 cursor.execute(f'CREATE TABLE IF NOT EXISTS {chord_types_table_name} ({chord_types_table_schema})')

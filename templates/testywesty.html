@@ -2,6 +2,8 @@
 <html>
 <head>
     <title>Random Data Page</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vexflow/1.2.90/vexflow-min.js"></script>
+    <script src="https://rawgit.com/0xfe/vexchords/master/releases/vexchords-min.js"></script>
 </head>
 <body>
     <h1>Random Data Page</h1>
@@ -16,17 +18,25 @@
             fetch('/data')
                 .then(response => response.json())
                 .then(data => {
-                    // Generate a random index
-                    const randomIndex = Math.floor(Math.random() * data.length);
+                    // // Generate a random index
+                    // const randomIndex = Math.floor(Math.random() * data.length);
 
-                    // Get the random row from the data
-                    const randomRow = data[randomIndex];
+                    // // Get the random row from the data
+                    // const randomRow = data[randomIndex];
 
-                    // Update the paragraph with the random row
-                    dataParagraph.textContent = JSON.stringify(randomRow);
+                    // // Update the paragraph with the random row
+                    // dataParagraph.textContent = JSON.stringify(randomRow);
+                    dataParagraph.textContent = data;
                 })
                 .catch(error => console.error(error));
         });
+    </script>
+    <div id="chord"></div>
+    <script>
+        var div = document.getElementById("chord");
+        var chord = new ChordBox(div, 100, 120);
+        chord.setChord("C Major", "D#", ["x", "0", "1", "3"]);
+        chord.draw();
     </script>
 </body>
 </html>
