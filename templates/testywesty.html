@@ -21,14 +21,14 @@
                 .then(response => response.json())
                 .then(data => {
                     // // Generate a random index
-                    // const randomIndex = Math.floor(Math.random() * data.length);
+                    const randomIndex = Math.floor(Math.random() * data.length);
 
                     // // Get the random row from the data
-                    // const randomRow = data[randomIndex];
+                    const randomRow = data[randomIndex];
 
                     // // Update the paragraph with the random row
-                    // dataParagraph.textContent = JSON.stringify(randomRow);
-                    dataParagraph.textContent = data;
+                    dataParagraph.textContent = JSON.stringify(randomRow);
+                    // dataParagraph.textContent = data;
                 })
                 .catch(error => console.error(error));
         });
