@@ -65,7 +65,7 @@ class ChordBox {
     this.y += this.fretSpacing;
 
     this.metrics = {
-      circleRadius: this.width / 20,
+      circleRadius: this.width / 13, // originally 20
       barreRadius: this.width / 25,
       fontSize: this.params.fontSize || Math.ceil(this.width / 8),
       barShiftX: this.width / 28,
@@ -132,10 +132,11 @@ class ChordBox {
 
     // Draw guitar bridge
     if (this.position <= 1) {
-      const fromX = this.x;
+      const fromX = this.x - this.params.stringWidth / 2;
       const fromY = this.y - this.metrics.bridgeStrokeWidth;
       this.canvas
-        .rect(this.x + spacing * (this.numStrings - 1) - fromX, this.y - fromY)
+        // .rect(this.x + spacing * (this.numStrings - 1) - fromX, this.y - fromY) // og
+        .rect(this.x + spacing * (this.numStrings - 1) - fromX + this.params.stringWidth / 2, this.y - fromY)
         .move(fromX, fromY)
         .stroke({ width: 0 })
         .fill(this.params.bridgeColor);
@@ -154,7 +155,7 @@ class ChordBox {
 
     // Draw frets
     for (let i = 0; i < this.numFrets + 1; i += 1) {
-      this.drawLine(this.x, this.y + fretSpacing * i, this.x + spacing * (this.numStrings - 1), this.y + fretSpacing * i).stroke({
+      this.drawLine(this.x - this.params.stringWidth / 2, this.y + fretSpacing * i, this.x + spacing * (this.numStrings - 1) + this.params.stringWidth / 2, this.y + fretSpacing * i).stroke({
         width: this.params.fretWidth,
         color: this.params.fretColor,
       });
@@ -163,7 +164,8 @@ class ChordBox {
     // Draw tuning keys
     if (this.params.showTuning && this.tuning.length !== 0) {
       for (let i = 0; i < Math.min(this.numStrings, this.tuning.length); i += 1) {
-        this.drawText(this.x + this.spacing * i, this.y + this.numFrets * this.fretSpacing + this.fretSpacing / 12, this.tuning[i]);
+        this.drawText(this.x + this.spacing * i, this.y + this.numFrets * this.fretSpacing + this.fretSpacing / 12, this.tuning[i])
+         .stroke({ width: 0 });
       }
     }
 
@@ -197,6 +199,9 @@ class ChordBox {
       y -= this.metrics.bridgeStrokeWidth;
     }
 
+    const fontSize = this.metrics.fontSize * 0.75; //originally 0.55
+    const textYShift = fontSize * 0.50; // originally 0.66
+
     if (!mute) {
       this.canvas
         .circle()
@@ -205,18 +210,20 @@ class ChordBox {
         .stroke({ color: this.params.strokeColor, width: this.params.strokeWidth })
         .fill(fretNum > 0 ? this.params.strokeColor : this.params.bgColor);
     } else {
-      this.drawText(x, y - this.fretSpacing, 'X');
+      // this.drawText(x, y - this.fretSpacing, 'X'); // OG
+      this.drawText(x, y - this.fretSpacing / 2 - textYShift, 'X', {
+        weight: this.params.labelWeight,
+        size: fontSize,
+      }).stroke({width: 0.0})
     }
 
     if (label) {
-      const fontSize = this.metrics.fontSize * 0.55;
-      const textYShift = fontSize * 0.66;
       this.drawText(x, y - this.fretSpacing / 2 - textYShift, label, {
         weight: this.params.labelWeight,
         size: fontSize,
       })
         .stroke({
-          width: 0.7,
+          width: 0.0, // originally 0.7
           color: fretNum !== 0 ? this.params.labelColor : this.params.strokeColor,
         })
         .fill(fretNum !== 0 ? this.params.labelColor : this.params.strokeColor);

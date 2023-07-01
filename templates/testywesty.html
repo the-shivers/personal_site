@@ -3,44 +3,80 @@
 <head>
     <title>Random Data Page</title>
     <script type="module" src="/static/main.js"></script>
+    <link href="/static/styles.css" rel="stylesheet">
 </head>
 <body>
     <h1>Random Data Page</h1>
-    <button id="updateButton">Update Paragraph</button>
+    <button id="updateButton" onclick="this.focus()">Update Paragraph</button>
     <p id="dataParagraph">Click the button to load random data.</p>
-
-    <script>
-        // // Declare a variable to hold your data
-        // let data;
-        // fetch('/data')
-        // .then(response => response.json())
-        // .then(fetchedData => {
-        //     // Store the fetched data
-        //     data = fetchedData;
-        // })
-        // .catch(error => console.error(error));
-
-        // const updateButton = document.getElementById('updateButton');
-        // const dataParagraph = document.getElementById('dataParagraph');
-
-        // updateButton.addEventListener('click', () => {
-        // // Check if data has been fetched
-        // if (data) {
-        //     // Generate a random index
-        //     const randomIndex = Math.floor(Math.random() * data.length);
-        //     // Get the random row from the data
-        //     const randomRow = data[randomIndex];
-        //     // Update the paragraph with the random row
-        //     dataParagraph.textContent = JSON.stringify(randomRow);
-        // } else {
-        //     // If data has not yet been fetched, display an error message
-        //     dataParagraph.textContent = "Data not yet loaded. Please try again in a few seconds.";
-        // }
-        // });
-    </script>
-
+    
+    <div style="display: flex;">
+        <div id="chords_and_options">
+            <div id="chord_checkboxes">
+                <h3>Chords</h3>
+                <input type="checkbox" id="ch_basics" checked>
+                <label for="ch_basics">Basic</label><br>
+                <input type="checkbox" id="ch_common" checked>
+                <label for="ch_common">Common</label><br>
+                <input type="checkbox" id="ch_extended">
+                <label for="ch_extended">Extended</label><br>
+                <input type="checkbox" id="ch_altered">
+                <label for="ch_altered">Altered</label><br>
+                <input type="checkbox" id="ch_jazz_variations_1">
+                <label for="ch_jazz_variations_1">Jazz Variations 1</label><br>
+                <input type="checkbox" id="ch_jazz_variations_2">
+                <label for="ch_jazz_variations_2">Jazz Variations 2</label><br>
+                <input type="checkbox" id="ch_added">
+                <label for="ch_added">Added</label><br>
+            </div>
+            <div id="options">
+                <h3>Options</h3>
+                <label for="opt_fret">Max Fret:</label><input type="number" id="opt_fret" value="4" style="width: 50px;">
+                <br>
+                <label for="opt_stretch">Max Stretch:</label><input type="number" id="opt_stretch" value="4" style="width: 50px;">
+                <br>
+                <input type="checkbox" id="opt_enable_mute">
+                <label for="opt_enable_mute">Enable Muted Strings</label>
+                <br>
+                <!-- <input type="checkbox" id="opt_canon"><label for="opt_canon">Only Canonical Fingerings:</label>
+                <br> -->
+                <label for="opt_tune">Ukulele Tuning:</label>
+                <select id="opt_tune">
+                    <option value="high_g">High G (Standard)</option>
+                    <option value="low_g">Low G</option>
+                    <option value="baritone">Baritone</option>
+                </select>
+            </div>
+        </div>
+        <div id="root_checkboxes">
+            <h3>Roots</h3>
+            <input type="checkbox" id="chkA" checked>
+            <label for="chkA">A</label><br>
+            <input type="checkbox" id="chkAs" checked>
+            <label for="chkA">As</label><br>
+            <input type="checkbox" id="chkB" checked>
+            <label for="chkB">B</label><br>
+            <input type="checkbox" id="chkC" checked>
+            <label for="chkC">C</label><br>
+            <input type="checkbox" id="chkCs" checked>
+            <label for="chkC">Cs</label><br>
+            <input type="checkbox" id="chkD" checked>
+            <label for="chkD">D</label><br>
+            <input type="checkbox" id="chkDs"checked>
+            <label for="chkD">Ds</label><br>
+            <input type="checkbox" id="chkE" checked>
+            <label for="chkE">E</label><br>
+            <input type="checkbox" id="chkF" checked>
+            <label for="chkF">F</label><br>
+            <input type="checkbox" id="chkFs" checked>
+            <label for="chkF">Fs</label><br>
+            <input type="checkbox" id="chkG" checked>
+            <label for="chkG">G</label><br>
+            <input type="checkbox" id="chkGs" checked>
+            <label for="chkG">Gs</label><br>
+        </div>
+    </div>
     <div id="drawing" style="text-align: center;"></div>
-
   </body>
 </html>
 

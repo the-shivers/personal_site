@@ -12,313 +12,390 @@ ABS_NOTES_DICT = dict(zip(ABS_NOTES, range(ABS_NOTES_LEN)))
 MAX_FRET = 20
 MAX_STRETCH = 10
 CHORD_TYPES = [
-    # four basic triads
+    # basics
     {
         'type': 'major',
         'abbrv': '',
-        'ints': [0, 4, 7]
+        'ints': [0, 4, 7],
+        'cat': 'basics'
     },
     {
         'type': 'minor',
         'abbrv': 'm',
-        'ints': [0, 3, 7]
+        'ints': [0, 3, 7],
+        'cat': 'basics'
     },
-    {
-        'type': 'diminished',
-        'abbrv': 'dim',
-        'ints': [0, 3, 6]
-    },
-    {
-        'type': 'augmented',
-        'abbrv': 'aug',
-        'ints': [0, 4, 8]
-    },
-    # suspensions
-    {
-        'type': 'suspended_2',
-        'abbrv': 'sus2',
-        'ints': [0, 2, 7]
-    },
-    {
-        'type': 'suspended_4',
-        'abbrv': 'sus4',
-        'ints': [0, 5, 7]
-    },
-    {
-        "type": "dominant_7_suspended_4",
-        "abbrv": "7sus4",
-        "ints": [0, 5, 7, 10]
-    },
-    # sixths
-    {
-        "type": "major_6",
-        "abbrv": "6",
-        "ints": [0, 4, 7, 9]
-    },
-    {
-        "type": "minor_6",
-        "abbrv": "m6",
-        "ints": [0, 3, 7, 9]
-    },
-    # common sevenths
+    # common
     {
         "type": "major_7",
         "abbrv": "Maj7",
-        "ints": [0, 4, 7, 11]
+        "ints": [0, 4, 7, 11],
+        'cat': 'common'
     },
     {
         "type": "minor_7",
         "abbrv": "m7",
-        "ints": [0, 3, 7, 10]
+        "ints": [0, 3, 7, 10],
+        'cat': 'common'
     },
     {
         "type": "dominant_7",
         "abbrv": "7",
-        "ints": [0, 4, 7, 10]
+        "ints": [0, 4, 7, 10],
+        'cat': 'common'
     },
+    # extensions
     {
-        "type": "minor_major_7",
-        "abbrv": "mMaj7",
-        "ints": [0, 3, 7, 11]
-    },
-    {
-        "type": "half_diminished_7",
-        "abbrv": "m7b5",
-        "ints": [0, 3, 6, 10]
-    },
-    {
-        "type": "fully_diminished_7",
-        "abbrv": "°7",
-        "ints": [0, 3, 6, 9]
-    },
-    {
-        "type": "augmented_major_7",
-        "abbrv": "Maj7#5",
-        "ints": [0, 4, 8, 11]
-    },
-    {
-        "type": "dominant_7_augmented_5",
-        "abbrv": "7#5",
-        "ints": [0, 4, 8, 10]
-    },
-    # 9ths - 13ths, basics
-        {
         "type": "dominant_9",
         "abbrv": "9",
-        "ints": [0, 4, 7, 10, 14]
+        "ints": [0, 4, 7, 10, 14],
+        'cat': 'extended'
     },
     {
         "type": "major_9",
         "abbrv": "Maj9",
-        "ints": [0, 4, 7, 11, 14]
+        "ints": [0, 4, 7, 11, 14],
+        'cat': 'extended'
     },
     {
         "type": "minor_9",
         "abbrv": "m9",
-        "ints": [0, 3, 7, 10, 14]
+        "ints": [0, 3, 7, 10, 14],
+        'cat': 'extended'
     },
     {
         "type": "dominant_11",
         "abbrv": "11",
-        "ints": [0, 4, 7, 10, 14, 17]
+        "ints": [0, 4, 7, 10, 14, 17],
+        'cat': 'extended'
     },
     {
         "type": "major_11",
         "abbrv": "Maj11",
-        "ints": [0, 4, 7, 11, 14, 17]
+        "ints": [0, 4, 7, 11, 14, 17],
+        'cat': 'extended'
     },
     {
         "type": "minor_11",
         "abbrv": "m11",
-        "ints": [0, 3, 7, 10, 14, 17]
+        "ints": [0, 3, 7, 10, 14, 17],
+        'cat': 'extended'
     },
     {
         "type": "dominant_13",
         "abbrv": "13",
-        "ints": [0, 4, 7, 10, 14, 17, 21]
+        "ints": [0, 4, 7, 10, 14, 17, 21],
+        'cat': 'extended'
     },
     {
         "type": "major_13",
         "abbrv": "Maj13",
-        "ints": [0, 4, 7, 11, 14, 17, 21]
+        "ints": [0, 4, 7, 11, 14, 17, 21],
+        'cat': 'extended'
     },
     {
         "type": "minor_13",
         "abbrv": "m13",
-        "ints": [0, 3, 7, 10, 14, 17, 21]
+        "ints": [0, 3, 7, 10, 14, 17, 21],
+        'cat': 'extended'
+    },
+    # Altered
+    {
+        'type': 'diminished',
+        'abbrv': 'dim',
+        'ints': [0, 3, 6],
+        'cat': 'altered'
+    },
+    {
+        'type': 'augmented',
+        'abbrv': 'aug',
+        'ints': [0, 4, 8],
+        'cat': 'altered'
+    },
+    {
+        'type': 'suspended_2',
+        'abbrv': 'sus2',
+        'ints': [0, 2, 7],
+        'cat': 'altered'
+    },
+    {
+        'type': 'suspended_4',
+        'abbrv': 'sus4',
+        'ints': [0, 5, 7],
+        'cat': 'altered'
+    },
+    {
+        "type": "dominant_7_suspended_4",
+        "abbrv": "7sus4",
+        "ints": [0, 5, 7, 10],
+        'cat': 'altered'
+    },
+    {
+        "type": "major_6",
+        "abbrv": "6",
+        "ints": [0, 4, 7, 9],
+        'cat': 'altered'
+    },
+    {
+        "type": "minor_6",
+        "abbrv": "m6",
+        "ints": [0, 3, 7, 9],
+        'cat': 'altered'
+    },
+    {
+        "type": "minor_major_7",
+        "abbrv": "mMaj7",
+        "ints": [0, 3, 7, 11],
+        'cat': 'altered'
+    },
+    {
+        "type": "half_diminished_7",
+        "abbrv": "m7b5",
+        "ints": [0, 3, 6, 10],
+        'cat': 'altered'
+    },
+    {
+        "type": "fully_diminished_7",
+        "abbrv": "°7",
+        "ints": [0, 3, 6, 9],
+        'cat': 'altered'
+    },
+    {
+        "type": "augmented_major_7",
+        "abbrv": "Maj7#5",
+        "ints": [0, 4, 8, 11],
+        'cat': 'altered'
+    },
+    {
+        "type": "dominant_7_augmented_5",
+        "abbrv": "7#5",
+        "ints": [0, 4, 8, 10],
+        'cat': 'altered'
+    },
+    {
+        "type": "major_7_no_5",
+        "abbrv": "Maj7no5",
+        "ints": [0, 4, 11],
+        'cat': 'altered'
+    },
+    {
+        "type": "minor_7_no_5",
+        "abbrv": "m7no5",
+        "ints": [0, 3, 10],
+        'cat': 'altered'
+    },
+    {
+        "type": "dominant_7_no_5",
+        "abbrv": "7no5",
+        "ints": [0, 4, 10],
+        'cat': 'altered'
     },
     # Jazz Variations 1
     {
+        "type": "major_7_flat_5",
+        "abbrv": "Maj7b5",
+        "ints": [0, 4, 6, 11],
+        'cat': 'jazz_variations_1'
+    },
+    {
+        "type": "dominant_7_flat_5",
+        "abbrv": "7b5",
+        "ints": [0, 4, 6, 10],
+        'cat': 'jazz_variations_1'
+    },
+    {
         "type": "dominant_7_sharp_9",
         "abbrv": "7#9",
-        "ints": [0, 4, 7, 10, 15]
+        "ints": [0, 4, 7, 10, 15],
+        'cat': 'jazz_variations_1'
     },
     {
         "type": "dominant_7_flat_9",
         "abbrv": "7b9",
-        "ints": [0, 4, 7, 10, 13]
-    },
-    {
-        "type": "dominant_7_sharp_5_sharp_9",
-        "abbrv": "7#5#9",
-        "ints": [0, 4, 8, 10, 15]
-    },
-    {
-        "type": "dominant_7_sharp_11",
-        "abbrv": "7#11",
-        "ints": [0, 4, 7, 10, 18]
-    },
-    {
-        "type": "dominant_7_flat_5_flat_9",
-        "abbrv": "7b5b9",
-        "ints": [0, 4, 6, 10, 13]
-    },
-    {
-        "type": "major_7_flat_5",
-        "abbrv": "Maj7b5",
-        "ints": [0, 4, 6, 11]
-    },
-    {
-        "type": "dominant_9_sharp_11",
-        "abbrv": "9#11",
-        "ints": [0, 4, 7, 10, 14, 18]
-    },
-    {
-        "type": "dominant_13_sharp_11",
-        "abbrv": "13#11",
-        "ints": [0, 4, 7, 10, 14, 18, 21]
+        "ints": [0, 4, 7, 10, 13],
+        'cat': 'jazz_variations_1'
     },
     {
         "type": "major_6_9",
         "abbrv": "6/9",
-        "ints": [0, 4, 7, 9, 14]
+        "ints": [0, 4, 7, 9, 14],
+        'cat': 'jazz_variations_1'
     },
     {
         "type": "minor_6_9",
         "abbrv": "m6/9",
-        "ints": [0, 3, 7, 9, 14]
-    },
-    # Jazz Variations 2
-    {
-        "type": "dominant_7_flat_5",
-        "abbrv": "7b5",
-        "ints": [0, 4, 6, 10]
+        "ints": [0, 3, 7, 9, 14],
+        'cat': 'jazz_variations_1'
     },
     {
-        "type": "dominant_9_flat_13",
-        "abbrv": "9b13",
-        "ints": [0, 4, 7, 10, 14, 20]
+        "type": "dominant_9_sharp_11",
+        "abbrv": "9#11",
+        "ints": [0, 4, 7, 10, 14, 18],
+        'cat': 'jazz_variations_1'
     },
     {
         "type": "minor_Major_9",
         "abbrv": "mMaj9",
-        "ints": [0, 3, 7, 11, 14]
-    },
-    {
-        "type": "augmented_minor_7",
-        "abbrv": "+m7",
-        "ints": [0, 3, 8, 10]
-    },
-    {
-        "type": "minor_9_flat_5",
-        "abbrv": "m9b5",
-        "ints": [0, 3, 6, 10, 14]
+        "ints": [0, 3, 7, 11, 14],
+        'cat': 'jazz_variations_1'
     },
     {
         "type": "maj7_sharp_11",
         "abbrv": "Maj7#11",
-        "ints": [0, 4, 7, 11, 18]
-    },
-    {
-        "type": "augmented_major_9",
-        "abbrv": "Maj9#5",
-        "ints": [0, 4, 8, 11, 14]
-    },
-    {
-        "type": "augmented_7_flat_9",
-        "abbrv": "+7b9",
-        "ints": [0, 4, 8, 10, 13]
-    },
-    {
-        "type": "dominant_7_flat_9_flat_13",
-        "abbrv": "7b9b13",
-        "ints": [0, 4, 7, 10, 13, 20]
-    },
-    {
-        "type": "dominant_7_sharp_9_sharp_11",
-        "abbrv": "7#9#11",
-        "ints": [0, 4, 7, 10, 15, 18]
-    },
-    {
-        "type": "major_9_sharp_11",
-        "abbrv": "Maj9#11",
-        "ints": [0, 4, 7, 11, 14, 18]
+        "ints": [0, 4, 7, 11, 18],
+        'cat': 'jazz_variations_1'
     },
     {
         "type": "dominant_13_flat_9",
         "abbrv": "13b9",
-        "ints": [0, 4, 7, 10, 13, 21]
+        "ints": [0, 4, 7, 10, 13, 21],
+        'cat': 'jazz_variations_1'
+    },
+    # Jazz Variations 2
+    {
+        "type": "dominant_7_sharp_5_sharp_9",
+        "abbrv": "7#5#9",
+        "ints": [0, 4, 8, 10, 15],
+        'cat': 'jazz_variations_2'
+    },
+    {
+        "type": "dominant_7_sharp_11",
+        "abbrv": "7#11",
+        "ints": [0, 4, 7, 10, 18],
+        'cat': 'jazz_variations_2'
+    },
+    {
+        "type": "dominant_7_flat_5_flat_9",
+        "abbrv": "7b5b9",
+        "ints": [0, 4, 6, 10, 13],
+        'cat': 'jazz_variations_2'
+    },
+    {
+        "type": "dominant_13_sharp_11",
+        "abbrv": "13#11",
+        "ints": [0, 4, 7, 10, 14, 18, 21],
+        'cat': 'jazz_variations_2'
+    },
+    {
+        "type": "augmented_minor_7",
+        "abbrv": "+m7",
+        "ints": [0, 3, 8, 10],
+        'cat': 'jazz_variations_2'
+    },
+    {
+        "type": "minor_9_flat_5",
+        "abbrv": "m9b5",
+        "ints": [0, 3, 6, 10, 14],
+        'cat': 'jazz_variations_2'
+    },
+    {
+        "type": "augmented_major_9",
+        "abbrv": "Maj9#5",
+        "ints": [0, 4, 8, 11, 14],
+        'cat': 'jazz_variations_2'
+    },
+    {
+        "type": "augmented_7_flat_9",
+        "abbrv": "+7b9",
+        "ints": [0, 4, 8, 10, 13],
+        'cat': 'jazz_variations_2'
+    },
+    {
+        "type": "dominant_7_flat_9_flat_13",
+        "abbrv": "7b9b13",
+        "ints": [0, 4, 7, 10, 13, 20],
+        'cat': 'jazz_variations_2'
+    },
+    {
+        "type": "dominant_7_sharp_9_sharp_11",
+        "abbrv": "7#9#11",
+        "ints": [0, 4, 7, 10, 15, 18],
+        'cat': 'jazz_variations_2'
+    },
+    {
+        "type": "major_9_sharp_11",
+        "abbrv": "Maj9#11",
+        "ints": [0, 4, 7, 11, 14, 18],
+        'cat': 'jazz_variations_2'
     },
     {
         "type": "minor_major_7_flat_5",
         "abbrv": "mMaj7b5",
-        "ints": [0, 3, 6, 11]
+        "ints": [0, 3, 6, 11],
+        'cat': 'jazz_variations_2'
+    },
+    {
+        "type": "dominant_9_flat_13",
+        "abbrv": "9b13",
+        "ints": [0, 4, 7, 10, 14, 20],
+        'cat': 'jazz_variations_2'
     },
     # Adds 
     {
         "type": "add2",
         "abbrv": "add2",
-        "ints": [0, 2, 4, 7]
+        "ints": [0, 2, 4, 7],
+        'cat': 'added'
     },
     {
         "type": "add4",
         "abbrv": "add4",
-        "ints": [0, 4, 5, 7]
+        "ints": [0, 4, 5, 7],
+        'cat': 'added'
     },
     {
         "type": "add9",
         "abbrv": "add9",
-        "ints": [0, 4, 7, 14]
+        "ints": [0, 4, 7, 14],
+        'cat': 'added'
     },
     {
         "type": "minor_add2",
         "abbrv": "madd2",
-        "ints": [0, 2, 3, 7]
+        "ints": [0, 2, 3, 7],
+        'cat': 'added'
     },
     {
         "type": "minor_add4",
         "abbrv": "madd4",
-        "ints": [0, 3, 5, 7]
+        "ints": [0, 3, 5, 7],
+        'cat': 'added'
     },
     {
         "type": "minor_add9",
         "abbrv": "madd9",
-        "ints": [0, 3, 7, 14]
+        "ints": [0, 3, 7, 14],
+        'cat': 'added'
     },
     {
         "type": "dominant_7_add11",
         "abbrv": "7add11",
-        "ints": [0, 4, 7, 10, 17]
+        "ints": [0, 4, 7, 10, 17],
+        'cat': 'added'
     },
     {
         "type": "dominant_7_add13",
         "abbrv": "7add13",
-        "ints": [0, 4, 7, 10, 21]
+        "ints": [0, 4, 7, 10, 21],
+        'cat': 'added'
     },
     {
         "type": "dominant_7_add_6",
         "abbrv": "7/6",
-        "ints": [0, 4, 7, 9, 10]
+        "ints": [0, 4, 7, 9, 10],
+        'cat': 'added'
     },
     {
         "type": "major_7_add11",
         "abbrv": "Maj7add11",
-        "ints": [0, 4, 7, 11, 17]
+        "ints": [0, 4, 7, 11, 17],
+        'cat': 'added'
     },
     {
         "type": "major_7_add13",
         "abbrv": "Maj7add13",
-        "ints": [0, 4, 7, 11, 21]
+        "ints": [0, 4, 7, 11, 21],
+        'cat': 'added'
     }
 ]
 
@@ -359,7 +436,8 @@ for g in range(-1, MAX_FRET + 1):
                     'fret_max': max(zeroless_fingering) if zeroless_fingering else 0,
                     'fret_sum': sum(zeroless_fingering) if zeroless_fingering else 0,
                     'fret_stretch': max(zeroless_fingering) - max(0, min(zeroless_fingering)) 
-                        if zeroless_fingering else 0
+                        if zeroless_fingering else 0,
+                    'mute_count': [g, c, e, a].count(-1)
                 }]
                 counter += 1
 
@@ -379,12 +457,43 @@ def note_add_abs(abs_note, n):
 def get_rel_note(abs_note):
     return re.sub(r'\d', '', abs_note)
 
+# def test(i, chords):
+#     values = [
+#         i, 
+#         starter_data[i][0], 
+#         starter_data[i][5],
+#         ",".join([
+#             note_add_abs(starter_data[i][7], starter_data[i][1]) if starter_data[i][1] >= 0 else '',
+#             note_add_abs(starter_data[i][8], starter_data[i][2]) if starter_data[i][2] >= 0 else '',
+#             note_add_abs(starter_data[i][9], starter_data[i][3]) if starter_data[i][3] >= 0 else '',
+#             note_add_abs(starter_data[i][10], starter_data[i][4]) if starter_data[i][3] >= 0 else ''
+#         ]),
+#         note_add_abs(starter_data[i][7], starter_data[i][1]) if starter_data[i][1] >= 0 else '',
+#         note_add_abs(starter_data[i][8], starter_data[i][2]) if starter_data[i][2] >= 0 else '',
+#         note_add_abs(starter_data[i][9], starter_data[i][3]) if starter_data[i][3] >= 0 else '',
+#         note_add_abs(starter_data[i][10], starter_data[i][4]) if starter_data[i][3] >= 0 else '',
+#         ",".join(sorted(list(set([x for x in [
+#             get_rel_note(note_add_abs(starter_data[i][7], starter_data[i][1])) if starter_data[i][1] >= 0 else '',
+#             get_rel_note(note_add_abs(starter_data[i][8], starter_data[i][2])) if starter_data[i][2] >= 0 else '',
+#             get_rel_note(note_add_abs(starter_data[i][9], starter_data[i][3])) if starter_data[i][3] >= 0 else '',
+#             get_rel_note(note_add_abs(starter_data[i][10], starter_data[i][4])) if starter_data[i][3] >= 0 else ''
+#         ] if x])))),
+#         get_rel_note(note_add_abs(starter_data[i][7], starter_data[i][1])) if starter_data[i][1] >= 0 else '',
+#         get_rel_note(note_add_abs(starter_data[i][8], starter_data[i][2])) if starter_data[i][2] >= 0 else '',
+#         get_rel_note(note_add_abs(starter_data[i][9], starter_data[i][3])) if starter_data[i][3] >= 0 else '',
+#         get_rel_note(note_add_abs(starter_data[i][10], starter_data[i][4])) if starter_data[i][3] >= 0 else ''
+#     ]
+#     filtered_chords = [chord for chord in chords if chord[3] == values[8]]  
+#     return (values[8], filtered_chords)
 
+# chords = cursor.execute('select * from chords').fetchall()
+# test(10, chords)
 
 ##############
 ### SQLite ###
 ##############
 conn = sqlite3.connect('chords.db')
+conn.row_factory = sqlite3.Row   # This allows dictionaries to be returned from the fetch methods. 
 cursor = conn.cursor()
 
 # Notes table
@@ -407,19 +516,21 @@ chord_types_table_schema = """
     id INTEGER PRIMARY KEY,
     type TEXT NOT NULL UNIQUE,
     abbrv TEXT NOT NULL UNIQUE,
-    int_str TEXT NOT NULL
+    int_str TEXT NOT NULL,
+    cat TEXT NOT NULL
 """
 cursor.execute(f'DROP TABLE IF EXISTS {chord_types_table_name}')
 cursor.execute(f'CREATE TABLE IF NOT EXISTS {chord_types_table_name} ({chord_types_table_schema})')
 for i in range(len(CHORD_TYPES)):
-    placeholders = '?, ?, ?, ?'
+    placeholders = '?, ?, ?, ?, ?'
     values = [
         i, 
         CHORD_TYPES[i]['type'], 
         CHORD_TYPES[i]['abbrv'], 
-        ','.join([str(x) for x in CHORD_TYPES[i]['ints']])
+        ','.join([str(x) for x in CHORD_TYPES[i]['ints']]),
+        CHORD_TYPES[i]['cat']
     ]
-    cursor.execute(f'INSERT INTO {chord_types_table_name} (id, type, abbrv, int_str) VALUES ({placeholders})', values)
+    cursor.execute(f'INSERT INTO {chord_types_table_name} (id, type, abbrv, int_str, cat) VALUES ({placeholders})', values)
 
 
 # Chords
@@ -435,7 +546,7 @@ for note in NOTES:
             'root': note,
             'type': chord_type['type'],
             'notes': chord_notes,
-            'notes_str': ','.join(chord_notes)
+            'notes_str': ','.join(sorted(list(set(chord_notes))))
         }]
         counter += 1
 
@@ -485,12 +596,13 @@ fingerings_table_schema = """
         f4 INTEGER NOT NULL,
         fret_max INTEGER NOT NULL,
         fret_sum INTEGER NOT NULL,
-        fret_stretch INTEGER NOT NULL
+        fret_stretch INTEGER NOT NULL,
+        mute_count INTEGER NOT NULL
 """
 cursor.execute(f'DROP TABLE IF EXISTS {fingerings_table_name}')
 cursor.execute(f'CREATE TABLE IF NOT EXISTS {fingerings_table_name} ({fingerings_table_schema})')
 for i in range(len(FINGERINGS)):
-    placeholders = '?, ?, ?, ?, ?, ?, ?, ?, ?'
+    placeholders = '?, ?, ?, ?, ?, ?, ?, ?, ?, ?'
     values = [
         i,
         f"{FINGERINGS[i]['str1']},{FINGERINGS[i]['str2']},{FINGERINGS[i]['str3']},{FINGERINGS[i]['str4']}",
@@ -500,10 +612,11 @@ for i in range(len(FINGERINGS)):
         FINGERINGS[i]['str4'],
         FINGERINGS[i]['fret_max'],
         FINGERINGS[i]['fret_sum'],
-        FINGERINGS[i]['fret_stretch']
+        FINGERINGS[i]['fret_stretch'],
+        FINGERINGS[i]['mute_count']
     ]
     cursor.execute(
-        f'INSERT INTO {fingerings_table_name} (id, fingering_str, f1, f2, f3, f4, fret_max, fret_sum, fret_stretch) VALUES ({placeholders})', values
+        f'INSERT INTO {fingerings_table_name} (id, fingering_str, f1, f2, f3, f4, fret_max, fret_sum, fret_stretch, mute_count) VALUES ({placeholders})', values
     )
 
 
@@ -539,10 +652,15 @@ strums_table_name = 'strums'
 strums_table_starter_query = """
     SELECT
         fingerings.id as fingering_id,
+        fingerings.fingering_str as fingering_str,
         fingerings.f1 as f1,
         fingerings.f2 as f2,
         fingerings.f3 as f3,
         fingerings.f4 as f4,
+        fret_max,
+        fret_sum,
+        fret_stretch,
+        mute_count,
         tunings.id as tuning_id,
         tunings.name as tuning_name,
         tunings.str1 as str1,
@@ -557,6 +675,20 @@ strums_table_schema = """
         fingering_id TEXT NOT NULL,
         tuning_id TEXT NOT NULL,
         chord_id TEXT,
+        fingering_str TEXT NOT NULL,
+        f1 INTEGER NOT NULL,
+        f2 INTEGER NOT NULL,
+        f3 INTEGER NOT NULL,
+        f4 INTEGER NOT NULL,
+        fret_max INTEGER NOT NULL,
+        fret_sum INTEGER NOT NULL,
+        fret_stretch INTEGER NOT NULL,
+        mute_count INTEGER NOT NULL,
+        tuning_name STRING NOT NULL,
+        str1 TEXT NOT NULL,
+        str2 TEXT NOT NULL,
+        str3 TEXT NOT NULL,
+        str4 TEXT NOT NULL,
         abs_note_str TEXT,
         abs_note1 TEXT,
         abs_note2 TEXT,
@@ -568,92 +700,130 @@ strums_table_schema = """
         rel_note3 TEXT,
         rel_note4 TEXT,
         root_note TEXT, 
-        chord_type TEXT
+        chord_type TEXT,
+        chord_abbrv TEXT,
+        chord_int_str TEXT,
+        chord_cat TEXT
 """
 cursor.execute(f'DROP TABLE IF EXISTS {strums_table_name}')
 cursor.execute(f'CREATE TABLE IF NOT EXISTS {strums_table_name} ({strums_table_schema})')
 starter_data = cursor.execute(strums_table_starter_query).fetchall()
-my_data = [d for d in starter_data if d[1] == 0 and d[2] == 0 and d[3] == 0 and d[4] == 0]
-
-# def test(i, chords):
-#     values = [
-#         i, 
-#         starter_data[i][0], 
-#         starter_data[i][5],
-#         ",".join([
-#             note_add_abs(starter_data[i][7], starter_data[i][1]) if starter_data[i][1] >= 0 else '',
-#             note_add_abs(starter_data[i][8], starter_data[i][2]) if starter_data[i][2] >= 0 else '',
-#             note_add_abs(starter_data[i][9], starter_data[i][3]) if starter_data[i][3] >= 0 else '',
-#             note_add_abs(starter_data[i][10], starter_data[i][4]) if starter_data[i][3] >= 0 else ''
-#         ]),
-#         note_add_abs(starter_data[i][7], starter_data[i][1]) if starter_data[i][1] >= 0 else '',
-#         note_add_abs(starter_data[i][8], starter_data[i][2]) if starter_data[i][2] >= 0 else '',
-#         note_add_abs(starter_data[i][9], starter_data[i][3]) if starter_data[i][3] >= 0 else '',
-#         note_add_abs(starter_data[i][10], starter_data[i][4]) if starter_data[i][3] >= 0 else '',
-#         ",".join(sorted(list(set([x for x in [
-#             get_rel_note(note_add_abs(starter_data[i][7], starter_data[i][1])) if starter_data[i][1] >= 0 else '',
-#             get_rel_note(note_add_abs(starter_data[i][8], starter_data[i][2])) if starter_data[i][2] >= 0 else '',
-#             get_rel_note(note_add_abs(starter_data[i][9], starter_data[i][3])) if starter_data[i][3] >= 0 else '',
-#             get_rel_note(note_add_abs(starter_data[i][10], starter_data[i][4])) if starter_data[i][3] >= 0 else ''
-#         ] if x])))),
-#         get_rel_note(note_add_abs(starter_data[i][7], starter_data[i][1])) if starter_data[i][1] >= 0 else '',
-#         get_rel_note(note_add_abs(starter_data[i][8], starter_data[i][2])) if starter_data[i][2] >= 0 else '',
-#         get_rel_note(note_add_abs(starter_data[i][9], starter_data[i][3])) if starter_data[i][3] >= 0 else '',
-#         get_rel_note(note_add_abs(starter_data[i][10], starter_data[i][4])) if starter_data[i][3] >= 0 else ''
-#     ]
-#     filtered_chords = [chord for chord in chords if chord[3] == values[8]]  
-#     return (values[8], filtered_chords)
-
-# chords = cursor.execute('select * from chords').fetchall()
-# test(10, chords)
 
 counter = 0
-# starter_data = my_data
-for i in range(len(starter_data)):
-    placeholders = '?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?'
-    values = [
-        starter_data[i][0], 
-        starter_data[i][5],
-        ",".join([
-            note_add_abs(starter_data[i][7], starter_data[i][1]) if starter_data[i][1] >= 0 else '',
-            note_add_abs(starter_data[i][8], starter_data[i][2]) if starter_data[i][2] >= 0 else '',
-            note_add_abs(starter_data[i][9], starter_data[i][3]) if starter_data[i][3] >= 0 else '',
-            note_add_abs(starter_data[i][10], starter_data[i][4]) if starter_data[i][4] >= 0 else ''
-        ]),
-        note_add_abs(starter_data[i][7], starter_data[i][1]) if starter_data[i][1] >= 0 else '',
-        note_add_abs(starter_data[i][8], starter_data[i][2]) if starter_data[i][2] >= 0 else '',
-        note_add_abs(starter_data[i][9], starter_data[i][3]) if starter_data[i][3] >= 0 else '',
-        note_add_abs(starter_data[i][10], starter_data[i][4]) if starter_data[i][4] >= 0 else '',
-        ",".join(sorted(list(set([x for x in [
-            get_rel_note(note_add_abs(starter_data[i][7], starter_data[i][1])) if starter_data[i][1] >= 0 else '',
-            get_rel_note(note_add_abs(starter_data[i][8], starter_data[i][2])) if starter_data[i][2] >= 0 else '',
-            get_rel_note(note_add_abs(starter_data[i][9], starter_data[i][3])) if starter_data[i][3] >= 0 else '',
-            get_rel_note(note_add_abs(starter_data[i][10], starter_data[i][4])) if starter_data[i][4] >= 0 else ''
-        ] if x])))),
-        get_rel_note(note_add_abs(starter_data[i][7], starter_data[i][1])) if starter_data[i][1] >= 0 else '',
-        get_rel_note(note_add_abs(starter_data[i][8], starter_data[i][2])) if starter_data[i][2] >= 0 else '',
-        get_rel_note(note_add_abs(starter_data[i][9], starter_data[i][3])) if starter_data[i][3] >= 0 else '',
-        get_rel_note(note_add_abs(starter_data[i][10], starter_data[i][4])) if starter_data[i][4] >= 0 else ''
-    ]
-    chords = cursor.execute('select * from chords').fetchall()
-    filtered_chords = [chord for chord in chords if chord[5] == values[7]]
+for row in starter_data:
+    print(counter / len(starter_data))
+    params = {
+        'fingering_id': row['fingering_id'],
+        'tuning_id': row['tuning_id'],
+        'fingering_str': row['fingering_str'],
+        'f1': row['f1'],
+        'f2': row['f2'],
+        'f3': row['f3'],
+        'f4': row['f4'],
+        'fret_max': row['fret_max'],
+        'fret_sum': row['fret_sum'],
+        'fret_stretch': row['fret_stretch'],
+        'mute_count': row['mute_count'],
+        'tuning_name': row['tuning_name'],
+        'str1': row['str1'],
+        'str2': row['str2'],
+        'str3': row['str3'],
+        'str4': row['str4'],
+        'abs_note1': note_add_abs(row['str1'], row['f1']) if row['f1'] >= 0 else '',
+        'abs_note2': note_add_abs(row['str2'], row['f2']) if row['f2'] >= 0 else '',
+        'abs_note3': note_add_abs(row['str3'], row['f3']) if row['f3'] >= 0 else '',
+        'abs_note4': note_add_abs(row['str4'], row['f4']) if row['f4'] >= 0 else '',
+    }
+    params['abs_note_str'] = ','.join([
+        params['abs_note1'], params['abs_note2'], 
+        params['abs_note3'], params['abs_note4']
+    ])
+    params['rel_note1'] = get_rel_note(params['abs_note1'])
+    params['rel_note2'] = get_rel_note(params['abs_note2'])
+    params['rel_note3'] = get_rel_note(params['abs_note3'])
+    params['rel_note4'] = get_rel_note(params['abs_note4'])
+    params['rel_note_str'] = ','.join(sorted(list(set([
+        params['rel_note1'], params['rel_note2'], 
+        params['rel_note3'], params['rel_note4']
+    ]))))
+    chords = cursor.execute("""
+        select 
+            c.id as chord_id, c.root_note, c.rel_notes_str, 
+            ct.type as chord_type, ct.abbrv as chord_abbrv, ct.cat as chord_cat, ct.int_str as chord_int_str
+        from chords c join chord_types ct on c.chord_type_id = ct.id
+        """
+    ).fetchall()
+    filtered_chords = [chord for chord in chords if chord['rel_notes_str'] == params['rel_note_str']]
     if filtered_chords:
         for chord in filtered_chords:
-            new_vals = [chord[0], chord[2], chord[4]]
-            cursor.execute(
-                f'INSERT INTO {strums_table_name} \
-                (id, fingering_id, tuning_id, abs_note_str, abs_note1, abs_note2, abs_note3, abs_note4, rel_note_str, rel_note1, rel_note2, rel_note3, rel_note4, chord_id, root_note, chord_type) \
-                VALUES ({placeholders})', [counter] + values + new_vals
-            )
+            params['id'] = counter
+            params['chord_id'] = chord['chord_id']
+            params['root_note'] = chord['root_note']
+            params['chord_type'] = chord['chord_type']
+            params['chord_abbrv'] = chord['chord_abbrv']
+            params['chord_cat'] = chord['chord_cat']
+            placeholders = [':' + str(i) for i in params.keys()]
+            strum_query = f"INSERT INTO {strums_table_name} ({', '.join(params.keys())}) VALUES ({', '.join(placeholders)})"
+            cursor.execute(strum_query, params)
             counter += 1
     else:
-        new_vals = ['', '', '']
-        cursor.execute(
-            f'INSERT INTO {strums_table_name} \
-            (id, fingering_id, tuning_id, abs_note_str, abs_note1, abs_note2, abs_note3, abs_note4, rel_note_str, rel_note1, rel_note2, rel_note3, rel_note4, chord_id, root_note, chord_type) \
-            VALUES ({placeholders})', [counter] + values + new_vals
-        )
+        params['id'] = counter
+        params['chord_id'] = ''
+        params['root_note'] = ''
+        params['chord_type'] = ''
+        params['chord_abbrv'] = ''
+        params['chord_cat'] = ''
+        placeholders = [':' + str(i) for i in params.keys()]
+        strum_query = f"INSERT INTO {strums_table_name} ({', '.join(params.keys())}) VALUES ({', '.join(placeholders)})"
+        cursor.execute(strum_query, params)
         counter += 1
+
+
+    # placeholders = '?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?'
+    # values = [
+    #     # fingering_id, tuning_id, chor
+    #     starter_data[i][0], 
+    #     starter_data[i][5],
+    #     ",".join([
+    #         note_add_abs(starter_data[i][7], starter_data[i][1]) if starter_data[i][1] >= 0 else '',
+    #         note_add_abs(starter_data[i][8], starter_data[i][2]) if starter_data[i][2] >= 0 else '',
+    #         note_add_abs(starter_data[i][9], starter_data[i][3]) if starter_data[i][3] >= 0 else '',
+    #         note_add_abs(starter_data[i][10], starter_data[i][4]) if starter_data[i][4] >= 0 else ''
+    #     ]),
+    #     note_add_abs(starter_data[i][7], starter_data[i][1]) if starter_data[i][1] >= 0 else '',
+    #     note_add_abs(starter_data[i][8], starter_data[i][2]) if starter_data[i][2] >= 0 else '',
+    #     note_add_abs(starter_data[i][9], starter_data[i][3]) if starter_data[i][3] >= 0 else '',
+    #     note_add_abs(starter_data[i][10], starter_data[i][4]) if starter_data[i][4] >= 0 else '',
+    #     ",".join(sorted(list(set([x for x in [
+    #         get_rel_note(note_add_abs(starter_data[i][7], starter_data[i][1])) if starter_data[i][1] >= 0 else '',
+    #         get_rel_note(note_add_abs(starter_data[i][8], starter_data[i][2])) if starter_data[i][2] >= 0 else '',
+    #         get_rel_note(note_add_abs(starter_data[i][9], starter_data[i][3])) if starter_data[i][3] >= 0 else '',
+    #         get_rel_note(note_add_abs(starter_data[i][10], starter_data[i][4])) if starter_data[i][4] >= 0 else ''
+    #     ] if x])))),
+    #     get_rel_note(note_add_abs(starter_data[i][7], starter_data[i][1])) if starter_data[i][1] >= 0 else '',
+    #     get_rel_note(note_add_abs(starter_data[i][8], starter_data[i][2])) if starter_data[i][2] >= 0 else '',
+    #     get_rel_note(note_add_abs(starter_data[i][9], starter_data[i][3])) if starter_data[i][3] >= 0 else '',
+    #     get_rel_note(note_add_abs(starter_data[i][10], starter_data[i][4])) if starter_data[i][4] >= 0 else ''
+    # ]
+    # chords = cursor.execute('select * from chords').fetchall()
+    # filtered_chords = [chord for chord in chords if chord[5] == values[7]] # check if rel notes str matches
+    # if filtered_chords:
+    #     for chord in filtered_chords:
+    #         new_vals = [chord[0], chord[2], chord[4]]
+    #         cursor.execute(
+    #             f'INSERT INTO {strums_table_name} \
+    #             (id, fingering_id, tuning_id, abs_note_str, abs_note1, abs_note2, abs_note3, abs_note4, rel_note_str, rel_note1, rel_note2, rel_note3, rel_note4, chord_id, root_note, chord_type) \
+    #             VALUES ({placeholders})', [counter] + values + new_vals
+    #         )
+    #         counter += 1
+    # else:
+    #     new_vals = ['', '', '']
+    #     cursor.execute(
+    #         f'INSERT INTO {strums_table_name} \
+    #         (id, fingering_id, tuning_id, abs_note_str, abs_note1, abs_note2, abs_note3, abs_note4, rel_note_str, rel_note1, rel_note2, rel_note3, rel_note4, chord_id, root_note, chord_type) \
+    #         VALUES ({placeholders})', [counter] + values + new_vals
+    #     )
+    #     counter += 1
 
 conn.commit()
 conn.close()
