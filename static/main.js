@@ -80,19 +80,21 @@ function get_filter_dict() {
 }
 
 function get_disallowed_str(filter_dict, my_str = 'roots') {
-    my_list = []
+    let my_list = []
     if (my_str === 'roots') {
         for (const [key, value] of Object.entries(filter_dict)) {
             console.log(`${key}: ${value}`);
             if (key.slice(0, 3) === 'chk' && !(value)) {
-                my_list.push(key)
+                my_list.push(key.replace('chk', ''))
             }
         }
     } else {
         for (const [key, value] of Object.entries(filter_dict)) {
             console.log(`${key}: ${value}`);
             if (key.slice(0, 3) === 'ch_' && !(value)) {
-                my_list.push(key)
+                console.log('we did it')
+                my_list.push(key.replace('ch_', ''))
+                console.log(key.replace('ch_', ''))
             }
         }
     }
@@ -101,12 +103,10 @@ function get_disallowed_str(filter_dict, my_str = 'roots') {
 
 function filter_dict_to_query_params(filter_dict) {
     return {
-        'fret_max': filter_dict['fret_max'],
-        'fret_stretch': filter_dict['fret_stretch'],
-        'tuning_name': filter_dict['tuning_name'],
-        'mutes': filter_dict['mute_count'],
-        'chord_type': filter_dict['chord_type'],
-        'chord_root': filter_dict['chord_root']
+        'fret_max': filter_dict['opt_fret'],
+        'fret_stretch': filter_dict['opt_stretch'],
+        'tuning_name': filter_dict['opt_tune'],
+        'mutes': filter_dict['opt_enable_mute'].toString(),
         'disallowed_roots': get_disallowed_str(filter_dict, 'roots'),
         'disallowed_types': get_disallowed_str(filter_dict, 'types')
     }
@@ -118,14 +118,24 @@ updateButton.addEventListener('click', async () => {
     try {
         let filter_dict = get_filter_dict();
         let query_params = filter_dict_to_query_params(filter_dict);
-        let param_str = new URLSearchParams(query_params).toString();
+        // Below is magic code to remove keys with '' values.
+        let query_params_2 = Object.entries(query_params).reduce((acc, [k, v]) => v ? {...acc, [k]:v} : acc , {})
+        var param_str = Object.keys(query_params_2).map(function(key) {
+            return key + '=' + query_params_2[key];
+          }).join('&');
+        // let param_str = new URLSearchParams(query_params).toString();
+        console.log('filter dict', filter_dict)
+        console.log('query params', query_params)
+        console.log('query params2', query_params_2)
+        console.log(param_str)
         
-        const response = await fetch(`/data${param_str}`); 
+        const response = await fetch(`/data?${param_str.replace('#','s')}`); 
         const data = await response.json(); 
       
         if(data) {
-            const randomIndex = Math.floor(Math.random() * filtered_data.length);
-            const randomRow = filtered_data[randomIndex];
+            console.log('data', data)
+            const randomIndex = Math.floor(Math.random() * data.length);
+            const randomRow = data[randomIndex];
             console.log(randomRow)
             dataParagraph.textContent = JSON.stringify([
                 randomRow['root_note'], randomRow['chord_type']
@@ -164,6 +174,6 @@ updateButton.addEventListener('click', async () => {
         }
     } catch (error) {
         dataParagraph.textContent = "Data not yet loaded. Please try again in a few seconds.";
-        console.error(error);
+        console.log(error);
     }
 });
