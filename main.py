@@ -14,31 +14,46 @@ async def nice_text(request: Request):
     return templates.TemplateResponse("nice_text.html", {"request": request})
 
 @app.get("/data")
-async def get_data():
+async def get_data(
+    fret_max: int = 3,
+    fret_stretch: int = 3,
+    tuning_name: str = 'high_g',
+    mutes: int = 0,
+    limit: int = 200,
+    disallowed_roots: str = '',
+    disallowed_types: str = 'added,jazz_variations_2,jazz_variations_1,altered,extended'
+):
     conn = sqlite3.connect('chords.db')
     conn.row_factory = sqlite3.Row   # This allows dictionaries to be returned from the fetch methods. 
     cursor = conn.cursor()
-    my_query = """
-    SELECT s.*, f.fret_stretch, f.fret_max, f.fret_sum, f.f1, f.f2, f.f3, f.f4, f.mute_count, c.root_note, ct.cat, t.name as tuning_name 
-        FROM strums s
-        JOIN fingerings f
-            ON s.fingering_id = f.id
-        LEFT JOIN chords c
-            ON s.chord_id = c.id
-        JOIN chord_types ct
-            ON c.chord_type_id = ct.id
-        LEFT JOIN tunings t
-            ON s.tuning_id = t.id
-        WHERE s.chord_id <> ''
-            AND f.mute_count = 0
-            AND (ct.cat = 'basics' or ct.cat = 'common')
-            AND t.name = 'high_g'
-            AND f.fret_max <= 4
-            AND f.fret_stretch <= 4
-        LIMIT 200;
+
+    my_query = f"""
+        SELECT *
+        FROM strums
+        WHERE chord_id <> ''
+            AND mute_count == :mutes
+            AND fret_max <= :fret_max
+            AND fret_stretch <= :fret_stretch
+            AND tuning_name = :tuning_name
+            AND chord_type NOT IN (:format_disallowed_types)
+            AND chord_root NOT IN (:format_disallowed_roots)
+        LIMIT :limit;
     """
+
+    format_disallowed_roots = ', '.join([f"'{i}'" for i in disallowed_roots.split(',') if i != ''])
+    format_disallowed_types = ', '.join([f"'{i}'" for i in disallowed_types.split(',') if i != ''])
+    my_params = {
+        'mutes': mutes,
+        'fret_max': fret_max,
+        'fret_stretch': fret_stretch,
+        'tuning_name': tuning_name,
+        'format_disallowed_types': format_disallowed_types,
+        'format_disallowed_roots': format_disallowed_roots,
+        'limit': limit
+    }
+
     print(my_query)
-    cursor.execute(my_query)
+    cursor.execute(my_query, my_params)
     print('executed')
     rows = cursor.fetchall()
     print('fetched')
