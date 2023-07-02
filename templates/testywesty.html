@@ -3,12 +3,15 @@
 <head>
     <title>Random Data Page</title>
     <script type="module" src="/static/main.js"></script>
+    <!-- https://cdnjs.cloudflare.com/ajax/libs/vexflow/4.2.1/vexflow-min.js -->
+    <script src="https://unpkg.com/vexflow@4.0.1/build/cjs/vexflow-debug.js"></script>
     <link href="/static/styles.css" rel="stylesheet">
 </head>
 <body>
     <h1>Random Data Page</h1>
     <button id="updateButton">Update Paragraph</button>
     <p id="dataParagraph">Click the button to load random data.</p>
+    
     
     <div style="display: flex;">
         <div id="chords_and_options">
@@ -77,6 +80,7 @@
         </div>
     </div>
     <div id="drawing" style="text-align: center;"></div>
+    <div id="output"></div>
   </body>
 </html>
 

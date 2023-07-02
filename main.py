@@ -1,13 +1,22 @@
-from fastapi import FastAPI, Request
-#from fastapi.responses import HTMLResponse
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
 import sqlite3
+import re
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="/root/personal_site/static"), name="static")
 templates = Jinja2Templates(directory="templates")
+
+def split_for_superscript(chord):
+   match = re.search(r'(\d|min|Maj|sus)', chord)
+   if match:
+       index = match.start()
+       return chord[:index], chord[index:]
+   else:
+       return chord, ''
 
 @app.get("/nice-text")
 async def nice_text(request: Request):
@@ -89,4 +98,49 @@ async def get_data(
 @app.get("/testywesty")
 async def testywesty(request: Request):
     return templates.TemplateResponse("testywesty.html", {"request": request})
+
+# @app.get("/chord/{chord_slug}", response_class=HTMLResponse)
+# async def chord(request: Request, chord_slug: str):
+#     return templates.TemplateResponse("chord.html", {"request": request, "chord_slug": chord_slug})
+
+@app.get("/{tuning_name}/chord/{chord_slug}", response_class=HTMLResponse)
+async def chord(request: Request, chord_slug: str, tuning_name: str):
+
+    def split_note_chord(note_chord_string): # e.g. Asm, Bdim7, Cs7
+        if len(note_chord_string) > 1 and note_chord_string[1].lower() == 's':
+            root_note = note_chord_string[:2]   # Include the 's' in the root note
+            chord_abbreviation = note_chord_string[2:]
+        else:
+            root_note = note_chord_string[0]
+            chord_abbreviation = note_chord_string[1:]
+        return root_note, chord_abbreviation
+
+    try:
+        conn = sqlite3.connect('chords.db')
+        conn.row_factory = sqlite3.Row
+        conn.set_trace_callback(print)
+        cursor = conn.cursor()
+
+        cursor.execute('SELECT * FROM strums WHERE root_note = ? AND chord_abbrv = ? AND tuning_name = ? ORDER BY fret_score_alpha DESC', list(split_note_chord(chord_slug)) + [tuning_name])
+        chord_data = cursor.fetchall()
+
+        if chord_data is None:
+            raise HTTPException(status_code=404, detail="Chord not found")
+        
+        print(dict(chord_data[0]))
+
+        return templates.TemplateResponse("chord.html", {
+            "request": request, 
+            "chord_slug": chord_slug, 
+            "tuning_name": tuning_name, 
+            "chord_data": [dict(i) for i in chord_data],
+            "fixed_abbrv": list(split_for_superscript(dict(chord_data[0])['chord_text_abbrv']))
+        })
+
+    except Exception as error:
+        print(f"An error occurred: {error}")
+
+    finally:
+        if conn:
+            conn.close()
 

@@ -1,0 +1,101 @@
+<html>
+<head>
+    <title>Item Details</title>
+    <!-- <link href="{{ url_for('static', path='/styles.css') }}" rel="stylesheet"> -->
+    <script type="module" src="/static/chord.js"></script>
+    <script type="module" src="/static/chordbox.js"></script>
+    <script src="https://unpkg.com/vexflow@4.0.1/build/cjs/vexflow-debug.js"></script>
+    <link href="/static/styles.css" rel="stylesheet">
+</head>
+<body>
+    <div id="header">
+        <h1 id="emphasis_title">
+            {{ chord_data[0].root_note }}{{ fixed_abbrv[0] }}<sup>{{ fixed_abbrv[1] }}</sup>
+        </h1>
+        <h5 id="subtitle"><i>
+            {{ chord_data[0].root_note }} {{ chord_data[0].chord_type }}
+        </i></h5>
+    </div>
+    <div display="flex">   
+        <div id="chord_diagram"></div>
+        <div id="score"></div>
+        <div id="copy"><p>Item ID: {{ chord_data[0] }}</p>
+    </div>  
+    <script>
+        var vf = new Vex.Flow.Factory({renderer: {elementId: 'score', height: 400, width: 300}});
+        var score = vf.EasyScore();
+        var system = vf.System({x:30, y:10, spaceBetweenStaves:10, width:100});
+
+        var notes = [
+        score.notes('C#5/1', {stem: 'up'}),
+        score.notes('C#4/1', {stem: 'down'}),
+        score.notes('C#3/1', {clef: 'bass', stem: 'up'}),
+        score.notes('C#2/1', {clef: 'bass', stem: 'down'})
+        ];
+
+        system.addStave({
+        voices: [
+            score.voice(notes[0]),
+            score.voice(notes[1])
+        ]
+        }).addClef('treble');
+
+        system.addStave({
+        voices: [
+            score.voice(notes[2]),
+            score.voice(notes[3])
+        ]
+        }).addClef('bass');
+
+        system.addConnector()
+
+        // Change the color of the first note
+        notes[0][0].note_heads.forEach(function(note_head) {
+        note_head.setStyle({fillStyle: 'red', strokeStyle: 'red'});
+        });
+
+        vf.draw();
+    </script>
+        
+    </div>
+    <script type="module">
+        import ChordBox from '/static/chordbox.js';
+        const sel = document.getElementById('chord_diagram');
+        // import ChordBox from '/static/chordbox.js';
+        function draw(sel, chord, opts) {
+            return new ChordBox(sel, opts).draw(chord);
+        }
+        const convert = n => n === -1 ? 'x' : n;
+        sel.innerHTML = ''; // Remove previous content.
+        draw(
+            sel,
+            {
+                chord: [
+                    [4, 1, '4'], 
+                    [3, 1, '3'],
+                    [2, 1, '2'], 
+                    [1, 1, '1']
+                ],
+                tuning: ['G', 'C', 'E', 'A']
+            },
+            {
+                width: 250,
+                height: 400,
+                circleRadius: 100,
+                numStrings: 4,
+                numFrets: 4,
+                defaultColor: '#130400',
+                strokeWidth: 3,
+                fretWidth: 3,
+                stringWidth: 3,
+                labelWeight: 1,
+                labelSize: 1,
+                fontSize: 28,
+                fontWeight: 1,
+                fontFamily: ['"Courier Prime"', 'monospace']
+            }
+        );
+    </script>
+
+</body>
+</html>

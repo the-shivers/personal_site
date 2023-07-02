@@ -15,41 +15,46 @@ import ChordBox from './chordbox.js';
 const updateButton = document.getElementById('updateButton');
 const dataParagraph = document.getElementById('dataParagraph');
 const sel = document.getElementById('drawing');
+
+var vf = new Vex.Flow.Factory({renderer: {elementId: 'output', height: 700, width: 400}});
+var score = vf.EasyScore();
+var system = vf.System({x:30, y:10, spaceBetweenStaves:10, width:100});
+
+var notes = [
+  score.notes('C#5/1', {stem: 'up'}),
+  score.notes('C#4/1', {stem: 'down'}),
+  score.notes('C#3/1', {clef: 'bass', stem: 'up'}),
+  score.notes('C#2/1', {clef: 'bass', stem: 'down'})
+];
+
+system.addStave({
+  voices: [
+    score.voice(notes[0]),
+    score.voice(notes[1])
+  ]
+}).addClef('treble');
+
+system.addStave({
+  voices: [
+    score.voice(notes[2]),
+    score.voice(notes[3])
+  ]
+}).addClef('bass');
+
+system.addConnector()
+
+// Change the color of the first note
+notes[0][0].note_heads.forEach(function(note_head) {
+  note_head.setStyle({fillStyle: 'red', strokeStyle: 'red'});
+});
+
+vf.draw();
       
 function draw(sel, chord, opts) {
     return new ChordBox(sel, opts).draw(chord);
 }
 
 const convert = n => n === -1 ? 'x' : n;
-
-// function filter_strums(strums_data, filter_dict) {
-//     let new_list = [];
-//     for (let i = 0; i < strums_data.length; i++) {
-//         console.log('filter_dict btw', filter_dict)
-//         console.log(i, strums_data[i])
-//         let strum = strums_data[i]
-//         // if (!(filter_dict['chk' + strum['root_note'].replace('#', 's')])) { // Check if strum root lacks checkmark
-//         //     continue; // Do not add it to list, skip to next iteration
-//         // }
-//         // if (!(filter_dict['ch_' + strum['cat']])) { // Check if chord category lacks checkmark
-//         //     continue;
-//         // }
-//         // if (strum['fret_stretch'] > filter_dict['opt_stretch']) {
-//         //     continue;
-//         // }
-//         // if (strum['fret_max'] > filter_dict['opt_stretch']) {
-//         //     continue;
-//         // }
-//         // if (strum['mute_count'] > 0 && !(filter_dict['opt_enable_mute'])) {
-//         //     continue;
-//         // }
-//         // if (strum['tuning_name'] != filter_dict['opt_tune']) {
-//         //     continue;
-//         // }
-//         new_list.push(strum);
-//     }
-//     return new_list
-// }
 
 function get_filter_dict() {
     return {
@@ -94,7 +99,6 @@ function get_disallowed_str(filter_dict, my_str = 'roots') {
             if (key.slice(0, 3) === 'ch_' && !(value)) {
                 console.log('we did it')
                 my_list.push(key.replace('ch_', ''))
-                console.log(key.replace('ch_', ''))
             }
         }
     }
@@ -119,7 +123,8 @@ updateButton.addEventListener('click', async () => {
         let filter_dict = get_filter_dict();
         let query_params = filter_dict_to_query_params(filter_dict);
         // Below is magic code to remove keys with '' values.
-        let query_params_2 = Object.entries(query_params).reduce((acc, [k, v]) => v ? {...acc, [k]:v} : acc , {})
+        //let query_params_2 = Object.entries(query_params).reduce((acc, [k, v]) => v ? {...acc, [k]:v} : acc , {})
+        let query_params_2 = query_params
         var param_str = Object.keys(query_params_2).map(function(key) {
             return key + '=' + query_params_2[key];
           }).join('&');
@@ -158,7 +163,7 @@ updateButton.addEventListener('click', async () => {
                     circleRadius: 100,
                     numStrings: 4,
                     numFrets: 4,
-                    defaultColor: '#444',
+                    defaultColor: '#130400',
                     strokeWidth: 3,
                     fretWidth: 3,
                     stringWidth: 3,
