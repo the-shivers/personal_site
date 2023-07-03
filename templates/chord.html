@@ -8,94 +8,175 @@
     <link href="/static/styles.css" rel="stylesheet">
 </head>
 <body>
-    <div id="header">
+    <div class="breadcrumb">
+        <a href="https://shivers.dev">~</a> / 
+        <a href="https://shivers.dev/{{ chord_data[0].tuning_name }}">{{ chord_data[0].tuning_name }}</a> / 
+        <a href="https://shivers.dev/{{ chord_data[0].tuning_name }}/chords">chords</a> / 
+        <a href="https://shivers.dev/{{ chord_data[0].tuning_name }}/chords/{{ chord_data[0].root_note }}">{{ chord_data[0].root_note }}</a> / 
+        <span>{{ chord_data[0].root_note }}{{ chord_data[0].chord_abbrv }}</span>
+    </div>
+    <div id="header" style="height: 11em; display: flex; flex-direction: column; justify-content: flex-end; align-items: baseline;">
         <h1 id="emphasis_title">
-            {{ chord_data[0].root_note }}{{ fixed_abbrv[0] }}<sup>{{ fixed_abbrv[1] }}</sup>
+            {{ chord_data[0].root_note }}{{ fixed_abbrv[0] }}<sup class="sup">{{ fixed_abbrv[1] }}</sup>
         </h1>
         <h5 id="subtitle"><i>
             {{ chord_data[0].root_note }} {{ chord_data[0].chord_type }}
         </i></h5>
     </div>
-    <div display="flex">   
-        <div id="chord_diagram"></div>
-        <div id="score"></div>
-        <div id="copy"><p>Item ID: {{ chord_data[0] }}</p>
+    <hr>
+    <div class="container">   
+        <div id="chord_diagram" class="child"></div>
+        <div id="slideshow_tracker" class="child" width="100">
+            <div id="counterholder" class="child">
+                <p id='slideshow_tracker_p' style="display: block;">1 / {{ chord_data|length }}</p>
+            </div>
+            <div id='buttonholder' class="child">
+                <button id="prev_button">Prev.</button>
+                <button id="next_button">Next</button>
+            </div>
+        </div>
+        <div id="score" class="child"></div>
     </div>  
-    <script>
-        var vf = new Vex.Flow.Factory({renderer: {elementId: 'score', height: 400, width: 300}});
-        var score = vf.EasyScore();
-        var system = vf.System({x:30, y:10, spaceBetweenStaves:10, width:100});
+    <hr>
+    <div id="copy"><p id="copy_p"></p></div>
+    <script type="module">
+        let index = 0;
+        let full_chord_data = {{ chord_data|tojson }};
+        
+        import ChordBox from '/static/chordbox.js';
+        
+        // Funcs
+        function draw(sel, chord, opts, position) {
+            console.log('in new draw, position is:', position)
+            return new ChordBox(sel, opts).draw(chord, position=position);
+        }
 
-        var notes = [
-        score.notes('C#5/1', {stem: 'up'}),
-        score.notes('C#4/1', {stem: 'down'}),
-        score.notes('C#3/1', {clef: 'bass', stem: 'up'}),
-        score.notes('C#2/1', {clef: 'bass', stem: 'down'})
-        ];
+        const convert = n => n === -1 ? 'x' : n;
+        
+        function getNumberFromString(str) {
+            var num = str.match(/\d+/);
+            return num ? parseInt(num[0]) : null;
+        }
+        
+        function getMinExcludeZeroAndNegativeOne(array) {
+            array = array.filter(num => num > 0);  // exclude 0 and -1
+            return array.length ? Math.min(...array) : null;  // return null if array is empty
+        }
 
-        system.addStave({
-        voices: [
-            score.voice(notes[0]),
-            score.voice(notes[1])
-        ]
-        }).addClef('treble');
+        function adjustFingering(fingering_int, position) {
+            if (fingering_int == -1) {
+                return 'x';
+            } else if (fingering_int == 0) {
+                return 0;
+            } else if (position == 0) {
+                return fingering_int
+            } else {
+                return fingering_int - position + 1;
+            }
+        }
+        
+        function update_all(index) {
+            let chord_data = full_chord_data[index]
 
-        system.addStave({
-        voices: [
-            score.voice(notes[2]),
-            score.voice(notes[3])
-        ]
-        }).addClef('bass');
+            // Update Chord Diagram, start by removing old content
+            let chord_diagram = document.getElementById('chord_diagram');
+            let position = (chord_data['fret_max'] <= 4) ? 0 : getMinExcludeZeroAndNegativeOne([chord_data['f1'], chord_data['f2'], chord_data['f3'], chord_data['f4']])
+            let numFrets = (chord_data['fret_stretch'] < 4) ? 4 : Math.min(chord_data['fret_stretch'] + 1, 7);
+            chord_diagram.innerHTML = '';
+            draw(
+                chord_diagram, 
+                {
+                    chord: [
+                        [4, adjustFingering(chord_data['f1'], position), chord_data['rel_note1']], 
+                        [3, adjustFingering(chord_data['f2'], position), chord_data['rel_note2']],
+                        [2, adjustFingering(chord_data['f3'], position), chord_data['rel_note3']], 
+                        [1, adjustFingering(chord_data['f4'], position), chord_data['rel_note4']]
+                    ],
+                    position: position,
+                    tuning: [chord_data['str1'], chord_data['str2'], chord_data['str3'], chord_data['str4']],
+                    // numFrets: numFrets
+                },
+                {
+                    width: 250,
+                    height: 400,
+                    circleRadius: 100,
+                    numStrings: 4,
+                    numFrets: numFrets,
+                    defaultColor: '#130400',
+                    strokeWidth: 3,
+                    fretWidth: 3,
+                    stringWidth: 3,
+                    labelWeight: 1,
+                    labelSize: 1,
+                    fontSize: 28,
+                    fontWeight: 1,
+                    fontFamily: ['"Courier Prime"', 'monospace']
+                },
+                5
+            );
 
-        system.addConnector()
+            // Score
+            let score_sel = document.getElementById('score');
+            score_sel.innerHTML = ''; // Remove previous content.
+            var vf = new Vex.Flow.Factory({renderer: {elementId: 'score', height: 266, width: 105}});
+            var score = vf.EasyScore();
+            var system = vf.System({x:4, y:28, spaceBetweenStaves:10, width:100});
+            let abs_notes = [chord_data.abs_note4, chord_data.abs_note3, chord_data.abs_note2, chord_data.abs_note1]
+            let bass_voices = [];
+            let treble_voices = [];
+            for (let i = 0; i < abs_notes.length; i++) {
+                if (abs_notes[i]) { // Avoid falsy '' values for abs notes
+                    if (getNumberFromString(abs_notes[i]) <= 3) {
+                        bass_voices.push(score.voice(score.notes(`${abs_notes[i]}/1`, {clef: 'bass', stem: 'down'})))
+                    } else {
+                        treble_voices.push(score.voice(score.notes(`${abs_notes[i]}/1`, {stem: 'down'})))
+                    } 
+                }
+            }
+            console.log('treble_voices:', treble_voices, 'bass_voices', bass_voices)
+            system.addStave({voices: treble_voices}).addClef('treble');
+            if (bass_voices.length > 0) {
+                console.log('in here bass voices')
+                system.addStave({voices: bass_voices}).addClef('bass');
+            } else {
+                system.addStave({voices: [score.voice(score.notes(`d3/1/r`, {clef: 'bass'}))]}).addClef('bass');
+            }
+            system.addConnector()
+            vf.draw();
 
-        // Change the color of the first note
-        notes[0][0].note_heads.forEach(function(note_head) {
-        note_head.setStyle({fillStyle: 'red', strokeStyle: 'red'});
+            // Tracker
+            const sel3 = document.getElementById('slideshow_tracker_p');
+            sel3.innerHTML = `${index} / ${full_chord_data.length - 1}`
+
+            // Text
+            const sel4 = document.getElementById('copy_p');
+            sel4.innerHTML = `<br>Notes: ${chord_data.abs_note1}-${chord_data.abs_note2}-${chord_data.abs_note3}-${chord_data.abs_note4}<br>Stretch: ${chord_data.fret_stretch + 1}`
+        }
+
+        update_all(0);
+
+        const nextButton = document.getElementById('next_button');
+        nextButton.addEventListener('click', async () => {
+            console.log('index was: ', index)
+            index = (index + 1) % full_chord_data.length
+            console.log('index ia: ', index)
+            update_all(index);
         });
 
-        vf.draw();
-    </script>
-        
-    </div>
-    <script type="module">
-        import ChordBox from '/static/chordbox.js';
-        const sel = document.getElementById('chord_diagram');
-        // import ChordBox from '/static/chordbox.js';
-        function draw(sel, chord, opts) {
-            return new ChordBox(sel, opts).draw(chord);
-        }
-        const convert = n => n === -1 ? 'x' : n;
-        sel.innerHTML = ''; // Remove previous content.
-        draw(
-            sel,
-            {
-                chord: [
-                    [4, 1, '4'], 
-                    [3, 1, '3'],
-                    [2, 1, '2'], 
-                    [1, 1, '1']
-                ],
-                tuning: ['G', 'C', 'E', 'A']
-            },
-            {
-                width: 250,
-                height: 400,
-                circleRadius: 100,
-                numStrings: 4,
-                numFrets: 4,
-                defaultColor: '#130400',
-                strokeWidth: 3,
-                fretWidth: 3,
-                stringWidth: 3,
-                labelWeight: 1,
-                labelSize: 1,
-                fontSize: 28,
-                fontWeight: 1,
-                fontFamily: ['"Courier Prime"', 'monospace']
+        const prevButton = document.getElementById('prev_button');
+        prevButton.addEventListener('click', async () => {
+            console.log('index was: ', index)
+            if (index == 0) {
+                index = full_chord_data.length - 1
+            } else {
+                index--;
             }
-        );
+            console.log('index ia: ', index)
+            update_all(index);
+        });
+
     </script>
 
 </body>
 </html>
+

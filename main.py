@@ -103,7 +103,7 @@ async def testywesty(request: Request):
 # async def chord(request: Request, chord_slug: str):
 #     return templates.TemplateResponse("chord.html", {"request": request, "chord_slug": chord_slug})
 
-@app.get("/{tuning_name}/chord/{chord_slug}", response_class=HTMLResponse)
+@app.get("/{tuning_name}/chords/{chord_slug}", response_class=HTMLResponse)
 async def chord(request: Request, chord_slug: str, tuning_name: str):
 
     def split_note_chord(note_chord_string): # e.g. Asm, Bdim7, Cs7
@@ -121,7 +121,7 @@ async def chord(request: Request, chord_slug: str, tuning_name: str):
         conn.set_trace_callback(print)
         cursor = conn.cursor()
 
-        cursor.execute('SELECT * FROM strums WHERE root_note = ? AND chord_abbrv = ? AND tuning_name = ? ORDER BY fret_score_alpha DESC', list(split_note_chord(chord_slug)) + [tuning_name])
+        cursor.execute('SELECT * FROM strums WHERE root_note = ? AND chord_abbrv = ? AND tuning_name = ? AND fret_stretch <= 3 AND mute_count = 0 ORDER BY fret_score_alpha DESC', list(split_note_chord(chord_slug)) + [tuning_name])
         chord_data = cursor.fetchall()
 
         if chord_data is None:

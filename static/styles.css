@@ -11,30 +11,24 @@ body {
 /* https://news.ycombinator.com/item?id=32972004 */
 html {
   max-width: 70ch;
-  /* larger spacing on larger screens, very small spacing on tiny screens */
   padding: calc(1vmin + .5rem);
-  /* shorthand for margin-left/margin-right */
+  padding-top: 0;
   margin-inline: auto;
-  /* fluid sizing: https://frontaid.io/blog/fluid-typography-2d-css-locks-clamp/ */
   font-size: clamp(1em, 0.909em + 0.45vmin, 1.25em);
-  /* use system font stack: https://developer.mozilla.org/en-US/docs/Web/CSS/font-family */
-  font-family: system-ui
+  font-family: 'Courier Prime', monospace;
 }
 
-/* increase line-height for everything except headings */
 body :not(:is(h1,h2,h3,h4,h5,h6)) {
   line-height: 1.75;
 }
 
 h1 {
-  /* font-size: clamp(2em, 0.909em + 0.45vmin, 1.25em); */
-  /* font-size: clamp(2em, 0.909em + 0.45vmin + 0.909em + 0.45vmin, 2.5em); */
-  font-size: clamp(8em, 3.6em + 1.8vmin, 5em);
+  font-size: clamp(7em, 3.6em + 1.8vmin, 4em);
   font-family: 'Crimson Text';
   font-weight: 100;
   margin-top: 0;
   margin-bottom: 0;
-  line-height: 1;
+  line-height: 0.8;
 }
 
 h5 {
@@ -42,14 +36,24 @@ h5 {
   font-family: 'Crimson Text';
   font-weight: 100;
   margin-top: 0;
+  margin-bottom: 0;
   line-height: 1;
+}
+
+.sup {
+  font-size: 0.6em;
+  vertical-align: baseline; 
+  position: relative;
+  top: -0.4em;
+  line-height: 0;
 }
 
 #output svg {
   transform: scale(2);
 }
+
 #score svg {
-  transform: scale(2);
+  transform: scale(1.75);
 }
 
 #output svg path {
@@ -72,4 +76,74 @@ h5 {
   stroke: #130400;
 }
 
-/* https://coolors.co/130400-225560-e77728-e7decd-b2c9ab */
+#chord_diagram, #score {
+  margin: 0;
+  padding: 0;
+}
+
+#slideshow_tracker {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 150px;
+  width: 150px;
+ }
+
+ #buttonholder {
+  flex-direction: row;
+ }
+
+.container {
+  display: flex;
+}
+
+.child {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #AB9B7D;
+  margin: 15px 0 0 0;
+}
+
+button {
+  background-color: #130400;
+  color: #E7DECD;
+  border: 2px solid transparent;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, border 0.3s ease;
+  font-family: 'Courier Prime', monospace;
+}
+
+button:hover {
+  background-color: #E7DECD;
+  color: #130400;
+  border-color: #130400;
+}
+
+.breadcrumb {
+  padding: 0;
+}
+
+.breadcrumb a {
+  color: #3C7A89;
+  text-decoration: none;
+}
+
+.breadcrumb span {
+  color: #D16666;
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}

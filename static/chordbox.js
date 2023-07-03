@@ -30,6 +30,8 @@ class ChordBox {
         fontStyle: 'light',
         fontWeight: '100',
         labelWeight: '100',
+        position: 5,
+        positionText: 'AAA',
       },
       ...params,
     };
@@ -49,10 +51,10 @@ class ChordBox {
       .size(this.params.width, this.params.height);
 
     // Size and shift board
-    this.width = this.params.width * 0.75;
-    this.height = this.params.height * 0.75;
-    this.x = this.params.x + this.params.width * 0.15;
-    this.y = this.params.y + this.params.height * 0.15;
+    this.width = this.params.width * 0.85; // previously 0.75
+    this.height = this.params.height * 0.9; // previously 0.75
+    this.x = this.params.x + this.params.width * 0.1; // previously 0.15
+    this.y = this.params.y + this.params.height * 0.08; // previously 0.15
 
     this.numStrings = this.params.numStrings;
     this.numFrets = this.params.numFrets;
@@ -73,8 +75,10 @@ class ChordBox {
     };
 
     // Content
-    this.position = 0;
-    this.positionText = 0;
+    this.position = this.params.position;
+    this.positionText = this.params.positionText;
+    // this.position = 0; //og
+    // this.positionText = 0; //og
     this.chord = [];
     this.bars = [];
     this.tuning = ['E', 'A', 'D', 'G', 'B', 'E'];
@@ -118,6 +122,7 @@ class ChordBox {
   draw({
     chord, position, barres, positionText, tuning,
   }) {
+    console.log('chord was', chord, 'position was', position)
     this.chord = chord;
     this.position = position || 0;
     this.positionText = positionText || 0;
@@ -131,6 +136,7 @@ class ChordBox {
     const { fretSpacing } = this;
 
     // Draw guitar bridge
+    console.log('position was:', this.position, 'position text was:', this.positionText)
     if (this.position <= 1) {
       const fromX = this.x - this.params.stringWidth / 2;
       const fromY = this.y - this.metrics.bridgeStrokeWidth;
@@ -142,7 +148,7 @@ class ChordBox {
         .fill(this.params.bridgeColor);
     } else {
       // Draw position number
-      this.drawText(this.x - this.spacing / 2 - this.spacing * 0.1, this.y + this.fretSpacing * this.positionText, this.position);
+      this.drawText(this.x - this.spacing / 2 - this.spacing * 0.25, 14 + this.y + this.fretSpacing * this.positionText, this.position); // this.drawText(this.x - this.spacing / 2 - this.spacing * 0.1, this.y + this.fretSpacing * this.positionText, this.position);
     }
 
     // Draw strings

@@ -199,21 +199,21 @@ CHORD_TYPES = [
         'cat': 'altered'
     },
     {
-        "type": "Major 7th No 5th",
+        "type": "Major 7th no 5th",
         "abbrv": "Maj7no5",
         'text_abbrv': 'Maj7(no5)',
         "ints": [0, 4, 11],
         'cat': 'altered'
     },
     {
-        "type": "Minor 7th No 5th",
+        "type": "Minor 7th no 5th",
         "abbrv": "m7no5",
         'text_abbrv': 'm7(no5)',
         "ints": [0, 3, 10],
         'cat': 'altered'
     },
     {
-        "type": "Dominant 7th No 5th",
+        "type": "Dominant 7th no 5th",
         "abbrv": "7no5",
         'text_abbrv': '7(no5)',
         "ints": [0, 4, 10],
@@ -498,6 +498,14 @@ for g in range(-1, MAX_FRET + 1):
                         fret_score_alpha += 3
                     else:
                         fret_score_alpha -= i
+                fret_score_beta = -fret_stretch
+                for i in [g, c, e, a]:
+                    if i == -1:
+                        fret_score_alpha -= 10
+                    elif i == 0:
+                        fret_score_alpha += 0
+                    else:
+                        fret_score_alpha -= i
                 FINGERINGS += [{
                     'id': counter,
                     'fingering_str': ",".join([str(g), str(c), str(e), str(a)]),
@@ -509,7 +517,8 @@ for g in range(-1, MAX_FRET + 1):
                     'fret_sum': sum(zeroless_fingering) if zeroless_fingering else 0,
                     'fret_stretch': fret_stretch,
                     'mute_count': [g, c, e, a].count(-1),
-                    'fret_score_alpha': fret_score_alpha
+                    'fret_score_alpha': fret_score_alpha,
+                    'fret_score_beta': fret_score_beta
                 }]
                 counter += 1
 
@@ -639,12 +648,13 @@ fingerings_table_schema = """
         fret_sum INTEGER NOT NULL,
         fret_stretch INTEGER NOT NULL,
         mute_count INTEGER NOT NULL,
-        fret_score_alpha INTEGER NOT NULL
+        fret_score_alpha INTEGER NOT NULL,
+        fret_score_beta INTEGER NOT NULL
 """
 cursor.execute(f'DROP TABLE IF EXISTS {fingerings_table_name}')
 cursor.execute(f'CREATE TABLE IF NOT EXISTS {fingerings_table_name} ({fingerings_table_schema})')
 for i in range(len(FINGERINGS)):
-    placeholders = '?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?'
+    placeholders = '?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?'
     values = [
         i,
         f"{FINGERINGS[i]['str1']},{FINGERINGS[i]['str2']},{FINGERINGS[i]['str3']},{FINGERINGS[i]['str4']}",
@@ -656,10 +666,11 @@ for i in range(len(FINGERINGS)):
         FINGERINGS[i]['fret_sum'],
         FINGERINGS[i]['fret_stretch'],
         FINGERINGS[i]['mute_count'],
-        FINGERINGS[i]['fret_score_alpha']
+        FINGERINGS[i]['fret_score_alpha'],
+        FINGERINGS[i]['fret_score_beta']
     ]
     cursor.execute(
-        f'INSERT INTO {fingerings_table_name} (id, fingering_str, f1, f2, f3, f4, fret_max, fret_sum, fret_stretch, mute_count, fret_score_alpha) VALUES ({placeholders})', values
+        f'INSERT INTO {fingerings_table_name} (id, fingering_str, f1, f2, f3, f4, fret_max, fret_sum, fret_stretch, mute_count, fret_score_alpha, fret_score_beta) VALUES ({placeholders})', values
     )
 
 
@@ -705,6 +716,7 @@ strums_table_starter_query = """
         fret_stretch,
         mute_count,
         fret_score_alpha,
+        fret_score_beta,
         tunings.id as tuning_id,
         tunings.name as tuning_name,
         tunings.str1 as str1,
@@ -729,6 +741,7 @@ strums_table_schema = """
         fret_stretch INTEGER NOT NULL,
         mute_count INTEGER NOT NULL,
         fret_score_alpha INTEGER NOT NULL,
+        fret_score_beta INTEGER NOT NULL,
         tuning_name STRING NOT NULL,
         str1 TEXT NOT NULL,
         str2 TEXT NOT NULL,
@@ -771,6 +784,7 @@ for row in starter_data:
         'fret_stretch': row['fret_stretch'],
         'mute_count': row['mute_count'],
         'fret_score_alpha': row['fret_score_alpha'],
+        'fret_score_beta': row['fret_score_beta'],
         'tuning_name': row['tuning_name'],
         'str1': row['str1'],
         'str2': row['str2'],
