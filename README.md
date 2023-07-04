@@ -4,7 +4,7 @@ A picture is worth a thousand words:
 
 https://shivers.dev/uke
 
-What was once simply my personal website has devolved into a Ukulele chord diagramming website, assembled over a little under a week. I was disappointed at other chord website's information on the various fingering positions for chords. What notes were being played. And more importantly, for jazz chords, what notes were being excluded? This attempts to fix these issues with a huge variety of chords and positions, listing information for obscure fingerings and obscure chords.
+What was once simply my personal website has devolved into a Ukulele chord diagramming website, assembled over a little under a week. I was disappointed at other chord website's information on the various fingering positions for chords. What notes were being played? And more importantly, for jazz chords, what notes were being excluded? This attempts to fix these issues with a huge variety of chords and positions, listing information for obscure fingerings and obscure chords.
 
 TO DO:
  - Add sound
