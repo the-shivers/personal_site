@@ -9,7 +9,7 @@ What was once simply my personal website has devolved into a Ukulele chord diagr
 TO DO:
  - Add sound
  - Chord identification tool
- - Additional information for each chord (is is an inversion, did you leave out the fifth, etc.)
+ - Additional information for each chord (is it an inversion, did you leave out the fifth, etc.)
  - Make specific chord pages filterable (currently we remove all fingerings with muted chords--this could be an option instead. Similarly, we force limit the stretch size, which a large-handed player may wish to incease.)
  - Flash card tool
  - Refactor (obviously)
