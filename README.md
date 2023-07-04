@@ -14,3 +14,4 @@ TO DO:
  - Flash card tool
  - Refactor (obviously)
  - (pipe dream) use AI/other audio tools to see if we can recognize the notes/chord being played from a sound sample.
+ - Fix broken pages (we need pages for chord types)
