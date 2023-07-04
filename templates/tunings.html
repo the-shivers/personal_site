@@ -1,0 +1,45 @@
+<html>
+<head>
+    <title>Tunings</title>
+    <link href="/static/styles.css" rel="stylesheet">
+</head>
+<body>
+    <div class="breadcrumb">
+        <a href="https://shivers.dev">~</a> / 
+        <a href="https://shivers.dev/uke/">uke</a> / 
+        <span>{{ tuning_name }}</span>
+    </div>
+    <div id="header">
+        <h1 id="emphasis_title">
+            Tunings
+        </h1>
+        <h5 id="subtitle"><i>
+            for your instrument
+        </i></h5>
+    </div>
+    <hr>
+    <br>
+    <div>
+        You're currently set to {{ tuning_name | replace('_', ' ') }} tuning 
+        (strings tuned to: {{ tunings[0]['str1']}}, {{ tunings[0]['str2']}}, 
+        {{ tunings[0]['str3']}}, and {{ tunings[0]['str4']}}).
+        If you'd like, you can start exloring our ukulele 
+        <a href="https://shivers.dev/uke/{{ tuning_name }}/chords">chords</a>, 
+        or you can select a different tuning below:
+    </div>
+    <br>
+    <div>
+        <ul>
+        {% for tuning in tunings %}
+            <a href="https://shivers.dev/uke/{{ tuning['name'] }}">
+                <li>{{ tuning['name'] | replace('_', ' ') }} ({{ tuning['str1']}}-{{ tuning['str2']}}-{{ tuning['str3']}}-{{ tuning['str4']}})</li>
+            </a>
+        {% endfor %}
+        </ul>
+        <br>
+        <a href="https://shivers.dev/uke/{{ tuning_name }}/chords">Take me to the chords page!</a>
+    </div>
+    <br>
+    <hr>
+</body>
+</html>

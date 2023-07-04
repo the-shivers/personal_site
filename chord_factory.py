@@ -584,22 +584,6 @@ for i in range(len(CHORD_TYPES)):
     cursor.execute(f'INSERT INTO {chord_types_table_name} (id, type, abbrv, text_abbrv, int_str, cat) VALUES ({placeholders})', values)
 
 # Chords
-chords = []
-counter = 0
-for note in NOTES:
-    for chord_type in CHORD_TYPES:
-        chord_notes = []
-        for i in chord_type['ints']:
-            chord_notes += [note_add_rel(note, i)]
-        chords += [{
-            'id': counter,
-            'root': note,
-            'type': chord_type['type'],
-            'notes': chord_notes,
-            'notes_str': ','.join(sorted(list(set(chord_notes))))
-        }]
-        counter += 1
-
 chords_table_name = 'chords'
 chords_table_schema = """
     id INTEGER PRIMARY KEY,
@@ -608,6 +592,9 @@ chords_table_schema = """
     chord_type_id INTEGER NOT NULL,
     chord_type TEXT NOT NULL,
     rel_notes_str TEXT NOT NULL,
+    chord_abbrv TEXT NOT NULL,
+    chord_text_abbrv TEXT NOT NULL,
+    chord_cat TEXT NOT NULL,
     FOREIGN KEY (root_note_id) REFERENCES notes (id),
     FOREIGN KEY (chord_type_id) REFERENCES chord_types (id)
 """
@@ -619,20 +606,27 @@ result = cursor.execute(
         notes.str as root_note, \
         chord_types.id as chord_type_id, \
         chord_types.type as chord_type, \
-        chord_types.int_str \
-    from notes cross join chord_types order by 1, 2')
+        chord_types.int_str, \
+        chord_types.abbrv as chord_abbrv, \
+        chord_types.text_abbrv as chord_text_abbrv, \
+        chord_types.cat as chord_cat \
+    from notes cross join chord_types order by 1, 2'
+    )
 data = result.fetchall()
 for i in range(len(data)):
-    placeholders = '?, ?, ?, ?, ?, ?'
+    placeholders = '?, ?, ?, ?, ?, ?, ?, ?, ?'
     values = [
         i, 
         data[i][0], 
         data[i][1], 
         data[i][2], 
         data[i][3],
-        ",".join(sorted([note_add_rel(data[i][1], int(x)) for x in data[i][4].split(',')]))
+        ','.join(sorted(list(set([i for i in data[i][4].split(',') if i != ''])))), # Dedupe, remove '', sort, join without spaces
+        data[i]['chord_abbrv'],
+        data[i]['chord_text_abbrv'],
+        data[i]['chord_cat']
     ]
-    cursor.execute(f'INSERT INTO {chords_table_name} (id, root_note_id, root_note, chord_type_id, chord_type, rel_notes_str) VALUES ({placeholders})', values)
+    cursor.execute(f'INSERT INTO {chords_table_name} (id, root_note_id, root_note, chord_type_id, chord_type, rel_notes_str, chord_abbrv, chord_text_abbrv, chord_cat) VALUES ({placeholders})', values)
 
 
 # Fingerings

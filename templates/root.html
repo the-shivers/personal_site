@@ -1,0 +1,36 @@
+<html>
+<head>
+    <title>{{ root_note | replace('s', '♯') }} Chords</title>
+    <link href="/static/styles.css" rel="stylesheet">
+</head>
+<body>
+    <div class="breadcrumb">
+        <a href="https://shivers.dev">~</a> / 
+        <a href="https://shivers.dev/uke/">uke</a> / 
+        <a href="https://shivers.dev/uke/{{ tuning_name }}">{{ tuning_name }}</a> / 
+        <a href="https://shivers.dev/uke/{{ tuning_name }}/chords">chords</a> / 
+        <span>{{ root_note }}</span>
+    </div>
+    <div id="header">
+        <h1 id="emphasis_title">
+            {{ root_note | replace('s', '♯') }} Chords
+        </h1>
+        <h5 id="subtitle"><i>
+            by type
+        </i></h5>
+    </div>
+    <hr>
+    <div class="container"><ul>
+        <p id=links>
+            {% for chord in root_data %}
+                <ul>
+                    <a href="https://shivers.dev/uke/{{ tuning_name }}/chords/{{ root_note }}/{{ chord['chord_abbrv'] }}">
+                        <li>{{ chord['chord_type'] }} ({{ root_note | replace('s', '♯') }}{{ chord['chord_text_abbrv'] }})</li>
+                    </a>
+                </ul>
+            {% endfor %}
+        </p>
+    </div>
+    <hr>
+</body>
+</html>

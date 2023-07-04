@@ -1,7 +1,6 @@
 <html>
 <head>
-    <title>Item Details</title>
-    <!-- <link href="{{ url_for('static', path='/styles.css') }}" rel="stylesheet"> -->
+    <title>{{ chord_data[0].root_note }}{{ chord_data[0].chord_text_abbrv }}</title>
     <script type="module" src="/static/chord.js"></script>
     <script type="module" src="/static/chordbox.js"></script>
     <script src="https://unpkg.com/vexflow@4.0.1/build/cjs/vexflow-debug.js"></script>
@@ -10,12 +9,13 @@
 <body>
     <div class="breadcrumb">
         <a href="https://shivers.dev">~</a> / 
-        <a href="https://shivers.dev/{{ chord_data[0].tuning_name }}">{{ chord_data[0].tuning_name }}</a> / 
-        <a href="https://shivers.dev/{{ chord_data[0].tuning_name }}/chords">chords</a> / 
-        <a href="https://shivers.dev/{{ chord_data[0].tuning_name }}/chords/{{ chord_data[0].root_note }}">{{ chord_data[0].root_note }}</a> / 
+        <a href="https://shivers.dev/uke/">uke</a> / 
+        <a href="https://shivers.dev/uke/{{ chord_data[0].tuning_name }}">{{ chord_data[0].tuning_name }}</a> / 
+        <a href="https://shivers.dev/uke/{{ chord_data[0].tuning_name }}/chords">chords</a> / 
+        <a href="https://shivers.dev/uke/{{ chord_data[0].tuning_name }}/chords/{{ chord_data[0].root_note }}">{{ chord_data[0].root_note }}</a> / 
         <span>{{ chord_data[0].root_note }}{{ chord_data[0].chord_abbrv }}</span>
     </div>
-    <div id="header" style="height: 11em; display: flex; flex-direction: column; justify-content: flex-end; align-items: baseline;">
+    <div id="header">
         <h1 id="emphasis_title">
             {{ chord_data[0].root_note }}{{ fixed_abbrv[0] }}<sup class="sup">{{ fixed_abbrv[1] }}</sup>
         </h1>
@@ -26,17 +26,15 @@
     <hr>
     <div class="container">   
         <div id="chord_diagram" class="child"></div>
-        <div id="slideshow_tracker" class="child" width="100">
-            <div id="counterholder" class="child">
-                <p id='slideshow_tracker_p' style="display: block;">1 / {{ chord_data|length }}</p>
-            </div>
-            <div id='buttonholder' class="child">
-                <button id="prev_button">Prev.</button>
-                <button id="next_button">Next</button>
-            </div>
-        </div>
         <div id="score" class="child"></div>
     </div>  
+    <div id="slideshow_tracker">
+        <div id="counterholder">
+            <button id="prev_button">Prev.</button>
+            <p id='slideshow_tracker_p'>001 / {{ chord_data|length }}</p>
+            <button id="next_button">Next</button>
+        </div>
+    </div>
     <hr>
     <div id="copy"><p id="copy_p"></p></div>
     <script type="module">
@@ -74,6 +72,20 @@
                 return fingering_int - position + 1;
             }
         }
+
+        function intStrToNoteStr(root, int_str) {
+            // Given "A", and "0,4,7" returns "A, C, E"
+            let notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'] // TODO: shouldn't live here.
+            let int_list = int_str.split(",");
+            let root_int = notes.indexOf(root);
+            let return_list = [];
+            for (let i = 0; i < int_list.length; i++) {
+                return_list.push(
+                    notes[(parseInt(int_list[i]) + root_int) % notes.length]
+                )
+            }
+            return return_list.join(', ')
+        }
         
         function update_all(index) {
             let chord_data = full_chord_data[index]
@@ -93,12 +105,11 @@
                         [1, adjustFingering(chord_data['f4'], position), chord_data['rel_note4']]
                     ],
                     position: position,
-                    tuning: [chord_data['str1'], chord_data['str2'], chord_data['str3'], chord_data['str4']],
-                    // numFrets: numFrets
+                    tuning: [chord_data['str1'], chord_data['str2'], chord_data['str3'], chord_data['str4']]
                 },
                 {
-                    width: 250,
-                    height: 400,
+                    width: 300,
+                    height: 420,
                     circleRadius: 100,
                     numStrings: 4,
                     numFrets: numFrets,
@@ -118,9 +129,9 @@
             // Score
             let score_sel = document.getElementById('score');
             score_sel.innerHTML = ''; // Remove previous content.
-            var vf = new Vex.Flow.Factory({renderer: {elementId: 'score', height: 266, width: 105}});
+            var vf = new Vex.Flow.Factory({renderer: {elementId: 'score', height: 200, width: 115}});
             var score = vf.EasyScore();
-            var system = vf.System({x:4, y:28, spaceBetweenStaves:10, width:100});
+            var system = vf.System({x:5, y:-6, spaceBetweenStaves:10, width:108});
             let abs_notes = [chord_data.abs_note4, chord_data.abs_note3, chord_data.abs_note2, chord_data.abs_note1]
             let bass_voices = [];
             let treble_voices = [];
@@ -133,10 +144,8 @@
                     } 
                 }
             }
-            console.log('treble_voices:', treble_voices, 'bass_voices', bass_voices)
             system.addStave({voices: treble_voices}).addClef('treble');
             if (bass_voices.length > 0) {
-                console.log('in here bass voices')
                 system.addStave({voices: bass_voices}).addClef('bass');
             } else {
                 system.addStave({voices: [score.voice(score.notes(`d3/1/r`, {clef: 'bass'}))]}).addClef('bass');
@@ -146,32 +155,31 @@
 
             // Tracker
             const sel3 = document.getElementById('slideshow_tracker_p');
-            sel3.innerHTML = `${index} / ${full_chord_data.length - 1}`
+            sel3.innerHTML = `${index.toString().padStart(3, '0')} / ${(full_chord_data.length - 1).toString().padStart(3, 0)}`
 
             // Text
             const sel4 = document.getElementById('copy_p');
-            sel4.innerHTML = `<br>Notes: ${chord_data.abs_note1}-${chord_data.abs_note2}-${chord_data.abs_note3}-${chord_data.abs_note4}<br>Stretch: ${chord_data.fret_stretch + 1}`
+            console.log(chord_data)
+            let my_copy = `Target notes: ${intStrToNoteStr(chord_data.root_note, chord_data.chord_int_str)} <br>Played notes: ${chord_data.abs_note1}, ${chord_data.abs_note2}, ${chord_data.abs_note3}, ${chord_data.abs_note4}<br>Stretch: ${chord_data.fret_stretch + 1}`;
+            sel4.innerHTML = my_copy;
         }
 
+        // Populating and creating event listeners
         update_all(0);
 
         const nextButton = document.getElementById('next_button');
         nextButton.addEventListener('click', async () => {
-            console.log('index was: ', index)
             index = (index + 1) % full_chord_data.length
-            console.log('index ia: ', index)
             update_all(index);
         });
 
         const prevButton = document.getElementById('prev_button');
         prevButton.addEventListener('click', async () => {
-            console.log('index was: ', index)
             if (index == 0) {
                 index = full_chord_data.length - 1
             } else {
                 index--;
             }
-            console.log('index ia: ', index)
             update_all(index);
         });
 

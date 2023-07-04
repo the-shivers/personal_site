@@ -18,7 +18,7 @@ const sel = document.getElementById('drawing');
 
 var vf = new Vex.Flow.Factory({renderer: {elementId: 'output', height: 700, width: 400}});
 var score = vf.EasyScore();
-var system = vf.System({x:30, y:10, spaceBetweenStaves:10, width:100});
+var system = vf.System({x:0, y:0, spaceBetweenStaves:10, width:100});
 
 var notes = [
   score.notes('C#5/1', {stem: 'up'}),
@@ -158,8 +158,8 @@ updateButton.addEventListener('click', async () => {
                     tuning: ['G', 'C', 'E', 'A']
                 },
                 {
-                    width: 250,
-                    height: 400,
+                    width: 300,
+                    height: 500,
                     circleRadius: 100,
                     numStrings: 4,
                     numFrets: 4,

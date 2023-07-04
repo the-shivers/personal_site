@@ -148,7 +148,7 @@ class ChordBox {
         .fill(this.params.bridgeColor);
     } else {
       // Draw position number
-      this.drawText(this.x - this.spacing / 2 - this.spacing * 0.25, 14 + this.y + this.fretSpacing * this.positionText, this.position); // this.drawText(this.x - this.spacing / 2 - this.spacing * 0.1, this.y + this.fretSpacing * this.positionText, this.position);
+      this.drawText(this.x - this.spacing / 2 - this.spacing * 0.25, 14 + this.y + this.fretSpacing * this.positionText, this.position).stroke({ width: 0 }); // this.drawText(this.x - this.spacing / 2 - this.spacing * 0.1, this.y + this.fretSpacing * this.positionText, this.position);
     }
 
     // Draw strings
