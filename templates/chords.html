@@ -1,0 +1,62 @@
+<html>
+<head>
+    <title>Chords</title>
+    <link href="/static/styles.css" rel="stylesheet">
+    <style>
+      .hide-list {
+        display: none;
+      }
+      .show-link {
+        cursor: pointer;
+        text-decoration: none;
+        color: #107D87;
+      }
+      .show-link:hover {
+        text-decoration: underline;
+      }
+    </style>
+</head>
+<body>
+    <div class="breadcrumb">
+        <a href="https://shivers.dev">~</a> / 
+        <a href="https://shivers.dev/uke/">uke</a> / 
+        <span>{{ tuning_name }}</span>
+    </div>
+    <div id="header">
+        <h1 id="emphasis_title">
+            Chords
+        </h1>
+        <h5 id="subtitle"><i>
+            for {{tuning_name|replace('_', ' ')}} ukulele
+        </i></h5>
+    </div>
+    <hr>
+
+    {% for root in roots %}
+    <div class="block">
+        <h4>{{root.str}} Chords [<span class="show-link" onclick="toggleList(this)">show</span>]</h4>
+        <ul class="hide-list">
+            {% for chord_type in chord_types %}
+                <li><a href="https://shivers.dev/uke/{{tuning_name}}/{{root.str}}{{chord_type.abbrv}}">{{root.str}}{{chord_type.abbrv}} - {{root.str}} {{chord_type.type}}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endfor %}
+
+    <script>
+        function toggleList(element) {
+            var list = element.parentNode.nextElementSibling;
+            if (list.style.display === 'none' || list.style.display === '') {
+            list.style.display = 'block';
+            element.innerHTML = 'hide';
+            } else {
+            list.style.display = 'none';
+            element.innerHTML = 'show';
+            }
+        }
+    </script>
+
+    <br>
+    <hr>
+</body>
+</html>

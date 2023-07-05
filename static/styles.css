@@ -7,6 +7,7 @@ body {
   background: #E7DECD;
 }
 
+/* https://coolors.co/130400-225560-e77728-e7decd-b2c9ab */
 
 /* https://news.ycombinator.com/item?id=32972004 */
 html {
@@ -102,6 +103,12 @@ h6 {
 #slideshow_tracker {
   display: flex;
   justify-content: center;
+  margin: 0 0 0px 0;
+}
+
+#navigation_dropdowns {
+  display: flex;
+  justify-content: center;
   margin: 0 0 40px 0;
 }
 
@@ -190,3 +197,152 @@ ul {
 /* div {
   border: 2px solid #000;
 } */
+
+.collapsible {
+  background-color: #130400;
+  color: #E7DECD;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+}
+
+.active, .collapsible:hover {
+  background-color: #AB9B7D;
+}
+
+.content {
+  padding: 0 18px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+  background-color: #E7DECD;
+}
+
+.content-box {
+  width: 300px;
+  border: 1px solid #130400;
+  padding: 10px;
+}
+
+.content-box .btn {
+  display: block;
+  width: 100%;
+  padding: 10px 0;
+  background: #130400;
+  color: #E7DECD;
+  text-align: center;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.content-box .box a {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.content-box {
+  flex: 1 0 21%; /* Or whatever percentage that suits your design */
+  margin: 1%;
+  border: 1px solid #130400;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+
+
+
+select {
+  background-color: #130400;
+  color: #E7DECD;
+  border: 2px solid transparent;
+  border-radius: 0; 
+  padding: 10px 20px;
+  text-align: left; 
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 0px 5px 0px 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, border 0.3s ease;
+  font-family: 'Courier Prime', monospace;
+}
+
+select:hover {
+  background-color: #E7DECD;
+  color: #130400;
+  border-color: #130400;
+}
+
+/* Style for the options */
+select option {
+  background: #130400;
+  font-family: 'Courier Prime', monospace;
+  color: #E7DECD;
+}
+
+button, select {
+  height: 50px;
+  /* other styles... */
+}
+
+button, select {
+  box-sizing: border-box;
+  /* other styles... */
+}
+
+#root_notes_select {
+  width: 90px
+}
+
+#chord_types_select {
+  width: 150px
+}
+
+#tuning_select {
+  width: 150px
+}
+
+.sectionContainer {
+  background-color: #E7DECD;
+  color: #130400;
+}
+
+.sectionContainer h1 {
+  font-family: 'Courier Prime', monospace;
+  margin: 10px;
+}
+
+.linkParent a {
+  color: #130400;
+  text-decoration: none;
+  font-family: 'Courier Prime', monospace;
+}
+
+.linkParent a {
+  display: none;
+}
+
+.linkParent a.topLink {
+  display: block;
+}
+
+.moreOrLess {
+  color: #130400;
+  cursor: pointer;
+  font-family: 'Courier Prime', monospace;
+  margin: 10px;
+}
+
+.moreOrLess:hover {
+  color: #130400;
+}

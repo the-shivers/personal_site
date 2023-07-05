@@ -103,87 +103,42 @@ async def testywesty(request: Request):
 # async def chord(request: Request, chord_slug: str):
 #     return templates.TemplateResponse("chord.html", {"request": request, "chord_slug": chord_slug})
 
-@app.get("/uke/{tuning_name}/chords/{root_note}/{chord_abbrv}", response_class=HTMLResponse)
-async def chord(request: Request, root_note: str, chord_abbrv: str, tuning_name: str):
+@app.get("/uke/{tuning_name}/{chord_abbrv}", response_class=HTMLResponse)
+async def chord(request: Request, chord_abbrv: str, tuning_name: str, id: int = -1):
     try:
+        def split_chord(chord: str) -> tuple:
+            match = re.match(r'([A-Ga-g][s]?)(.*)', chord)
+            if match:
+                return match.group(1), match.group(2)
+            else:
+                return '', ''
+        root_note, chord_abbrv = split_chord(chord_abbrv)
         conn = sqlite3.connect('chords.db')
         conn.row_factory = sqlite3.Row
         conn.set_trace_callback(print)
         cursor = conn.cursor()
-
-        cursor.execute('SELECT * FROM strums WHERE root_note = ? AND chord_abbrv = ? AND tuning_name = ? AND fret_stretch <= 3 AND mute_count = 0 ORDER BY fret_score_alpha DESC', [root_note.replace('s','#'), chord_abbrv, tuning_name])
+        cursor.execute('SELECT * FROM strums WHERE root_note = ? AND chord_abbrv = ? AND tuning_name = ? AND fret_stretch <= 3 AND mute_count = 0 ORDER BY fret_score_beta DESC', [root_note.replace('s','#'), chord_abbrv, tuning_name])
         chord_data = cursor.fetchall()
-
-        if chord_data is None:
+        cursor.execute('SELECT * FROM tunings ORDER BY CASE WHEN name = ? THEN 1 ELSE 0 END DESC', [tuning_name])
+        tunings_data = cursor.fetchall()
+        cursor.execute('SELECT * FROM notes ORDER BY CASE WHEN str = ? THEN 1 ELSE 0 END DESC', [root_note.replace('s', '#')])
+        roots_data = cursor.fetchall()
+        cursor.execute('SELECT * FROM chord_types ORDER BY CASE WHEN abbrv = ? THEN 1 ELSE 0 END DESC', [chord_abbrv])
+        chord_types_data = cursor.fetchall()
+        if chord_data is None or tunings_data is None or roots_data is None or chord_types_data is None:
             raise HTTPException(status_code=404, detail="Chord not found")
-        
-        print(dict(chord_data[0]))
 
         return templates.TemplateResponse("chord.html", {
             "request": request, 
+            "id": id,
             "tuning_name": tuning_name, 
             "chord_data": [dict(i) for i in chord_data],
-            "fixed_abbrv": list(split_for_superscript(dict(chord_data[0])['chord_text_abbrv']))
+            "fixed_abbrv": list(split_for_superscript(dict(chord_data[0])['chord_text_abbrv'])),
+            "tunings_data": tunings_data,
+            "roots_data": roots_data,
+            "chord_types_data": chord_types_data
         })
 
-    except Exception as error:
-        print(f"An error occurred: {error}")
-
-    finally:
-        if conn:
-            conn.close()
-
-@app.get("/uke/{tuning_name}/chords/{root_note}", response_class=HTMLResponse)
-async def root(request: Request, root_note: str, tuning_name: str):
-    try:
-        conn = sqlite3.connect('chords.db')
-        conn.row_factory = sqlite3.Row
-        conn.set_trace_callback(print)
-        cursor = conn.cursor()
-        cursor.execute('SELECT * FROM chords WHERE root_note = ? ORDER BY id', [root_note.replace('s','#')])
-        root_data = cursor.fetchall()
-
-        if root_data is None:
-            raise HTTPException(status_code=404, detail="Root not found")
-        
-        print("root data is:", dict(root_data[0]))
-
-        return templates.TemplateResponse("root.html", {
-            "request": request, 
-            "root_note": root_note,
-            "tuning_name": tuning_name, 
-            "root_data": [dict(i) for i in root_data]
-        })
-    
-    except Exception as error:
-        print(f"An error occurred: {error}")
-
-    finally:
-        if conn:
-            conn.close()
-
-@app.get("/uke/{tuning_name}/chords", response_class=HTMLResponse)
-async def root(request: Request, tuning_name: str):
-    try:
-        conn = sqlite3.connect('chords.db')
-        conn.row_factory = sqlite3.Row
-        conn.set_trace_callback(print)
-        cursor = conn.cursor()
-        cursor.execute('SELECT * FROM chord_types ORDER BY id')
-        chord_types = cursor.fetchall()
-        cursor.execute('SELECT * FROM notes ORDER BY id')
-        roots = cursor.fetchall() 
-
-        if chord_types is None or roots is None:
-            raise HTTPException(status_code=404, detail="Query returned nothing, probably.")
-
-        return templates.TemplateResponse("all_chords.html", {
-            "request": request, 
-            "chord_types": chord_types,
-            "roots": roots,
-            "tuning_name": tuning_name
-        })
-    
     except Exception as error:
         print(f"An error occurred: {error}")
 
@@ -198,16 +153,18 @@ async def root(request: Request, tuning_name: str):
         conn.row_factory = sqlite3.Row
         conn.set_trace_callback(print)
         cursor = conn.cursor()
-        query = f"SELECT * FROM tunings ORDER BY CASE WHEN name = '{tuning_name}' THEN 1 ELSE 0 END DESC"
-        cursor.execute(query)
-        tunings = cursor.fetchall()
+        cursor.execute('SELECT * FROM chord_types ORDER BY id')
+        chord_types = cursor.fetchall()
+        cursor.execute('SELECT * FROM notes ORDER BY id')
+        roots = cursor.fetchall() 
 
-        if tunings is None:
+        if chord_types is None or roots is None:
             raise HTTPException(status_code=404, detail="Query returned nothing, probably.")
 
-        return templates.TemplateResponse("tunings.html", {
+        return templates.TemplateResponse("chords.html", {
             "request": request, 
-            "tunings": tunings,
+            "chord_types": chord_types,
+            "roots": roots,
             "tuning_name": tuning_name
         })
     
@@ -231,7 +188,7 @@ async def root(request: Request):
         if tunings is None:
             raise HTTPException(status_code=404, detail="Query returned nothing, probably.")
 
-        return templates.TemplateResponse("ukulele.html", {
+        return templates.TemplateResponse("uke.html", {
             "request": request, 
             "tunings": tunings
         })

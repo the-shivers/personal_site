@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>Ukulele w/ Shivers</title>
+    <title>Shivers Uke Tools</title>
     <link href="/static/styles.css" rel="stylesheet">
 </head>
 <body>
@@ -19,15 +19,18 @@
     <hr>
     <br>
     <div>
-        This is where I've decided to visualize Ukulele chords after being disappointed with the chord diagrams on other websites.
+        This is where I've decided to visualize ukulele chords after being disappointed with the chord diagrams on other websites.
         <br><br>
         Though this site is built to be navigated by modifying the URL (simply change the 'M' to 'm' to change the <a href="https://shivers.dev/uke/high_g/chords/C/M">C Major URL</a> to <a href="https://shivers.dev/uke/high_g/chords/C/m">C Minor</a>), you can find some other helpful links here:
-        <br>
+        <br><br>
+        Select your tuning to begin:
         <ul>
-            <li><a href="https://shivers.dev/uke/high_g">Tunings</a></li>
-            <li><a href="https://shivers.dev/uke/high_g/chords">Chords</a></li>
-            <li><a href="https://shivers.dev/uke/high_g/chords/C">C Chords</a></li>
+            {% for tuning in tunings %}
+            <li><a href="https://shivers.dev/uke/{{tuning.name}}">{{tuning.name}}</a></li>
+            {% endfor %}
         </ul>
+        <br>
+        Or jump straight to the <a href="https://shivers.dev/uke/high_g/CM?id=12393">chords</a>.
     </div>
     <br>
     <hr>

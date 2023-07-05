@@ -7,12 +7,17 @@
     <link href="/static/styles.css" rel="stylesheet">
 </head>
 <body>
+    <script>
+        function navigateToPage(value) {
+            if (value) {
+                window.location.href = value;
+            }
+        }
+    </script>
     <div class="breadcrumb">
         <a href="https://shivers.dev">~</a> / 
         <a href="https://shivers.dev/uke/">uke</a> / 
         <a href="https://shivers.dev/uke/{{ chord_data[0].tuning_name }}">{{ chord_data[0].tuning_name }}</a> / 
-        <a href="https://shivers.dev/uke/{{ chord_data[0].tuning_name }}/chords">chords</a> / 
-        <a href="https://shivers.dev/uke/{{ chord_data[0].tuning_name }}/chords/{{ chord_data[0].root_note }}">{{ chord_data[0].root_note }}</a> / 
         <span>{{ chord_data[0].root_note }}{{ chord_data[0].chord_abbrv }}</span>
     </div>
     <div id="header">
@@ -20,7 +25,7 @@
             {{ chord_data[0].root_note }}{{ fixed_abbrv[0] }}<sup class="sup">{{ fixed_abbrv[1] }}</sup>
         </h1>
         <h5 id="subtitle"><i>
-            {{ chord_data[0].root_note }} {{ chord_data[0].chord_type }}
+            {{ chord_data[0].root_note }} {{ chord_data[0].chord_type }} {{ strum }}
         </i></h5>
     </div>
     <hr>
@@ -30,10 +35,27 @@
     </div>  
     <div id="slideshow_tracker">
         <div id="counterholder">
-            <button id="prev_button">Prev.</button>
+            <button id="prev_button">prev</button>
             <p id='slideshow_tracker_p'>001 / {{ chord_data|length }}</p>
-            <button id="next_button">Next</button>
+            <button id="next_button">next</button>
         </div>
+    </div>
+    <div id="navigation_dropdowns">
+        <select onchange="navigateToPage(this.value)" id="tuning_select">
+            {% for tuning in tunings_data %}
+                <option value="https://shivers.dev/uke/{{tuning.name}}/{{chord_data[0].root_note|replace('#','s')}}{{chord_data[0].chord_abbrv}}">{{ tuning.name }}</option>
+            {% endfor %}
+        </select>
+        <select onchange="navigateToPage(this.value)" id="root_notes_select">
+            {% for root in roots_data %}
+            <option value="https://shivers.dev/uke/{{chord_data[0].tuning_name}}/{{root.str|replace('#','s')}}{{chord_data[0].chord_abbrv}}">{{ root.str }}</option>
+            {% endfor %}            
+        </select>
+        <select onchange="navigateToPage(this.value)" id="chord_types_select">
+            {% for chord_type in chord_types_data %}
+            <option value="https://shivers.dev/uke/{{chord_data[0].tuning_name}}/{{chord_data[0].root_note|replace('#','s')}}{{chord_type.abbrv}}">{{ chord_type.abbrv }}</option>
+            {% endfor %}            
+        </select>
     </div>
     <hr>
     <div id="copy"><p id="copy_p"></p></div>
@@ -162,10 +184,29 @@
             console.log(chord_data)
             let my_copy = `Target notes: ${intStrToNoteStr(chord_data.root_note, chord_data.chord_int_str)} <br>Played notes: ${chord_data.abs_note1}, ${chord_data.abs_note2}, ${chord_data.abs_note3}, ${chord_data.abs_note4}<br>Stretch: ${chord_data.fret_stretch + 1}`;
             sel4.innerHTML = my_copy;
+
+            // URL
+            const newState = { id: chord_data.id };
+            const title = '';
+            const url = `?id=${chord_data.id}`;
+            window.history.pushState(newState, title, url);
         }
 
         // Populating and creating event listeners
-        update_all(0);
+
+
+        // First, find out if strum exists (if not, updateall 0 )
+        // If it exists, check if its in the full chord data. If not, updateall 0.
+        // If it exists, get the index. update(index) 
+        if ({{id}} < 0) {
+            update_all(0);
+        } else if (!(full_chord_data.some(x => x.id === {{id}}))) {
+            update_all(0);
+        } else {
+            let ind = full_chord_data.findIndex(x => x.id == {{id}});
+            update_all( ind );
+        }
+
 
         const nextButton = document.getElementById('next_button');
         nextButton.addEventListener('click', async () => {
@@ -183,8 +224,9 @@
             update_all(index);
         });
 
-    </script>
+        
 
+    </script>
 </body>
 </html>
 
