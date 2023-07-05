@@ -37,7 +37,7 @@
         <h4>{{root.str}} Chords [<span class="show-link" onclick="toggleList(this)">show</span>]</h4>
         <ul class="hide-list">
             {% for chord_type in chord_types %}
-                <li><a href="https://shivers.dev/uke/{{tuning_name}}/{{root.str}}{{chord_type.abbrv}}">{{root.str}}{{chord_type.abbrv}} - {{root.str}} {{chord_type.type}}</a></li>
+                <li><a href="https://shivers.dev/uke/{{tuning_name}}/{{root.str | replace('#', 's')}}{{chord_type.abbrv}}">{{root.str}}{{chord_type.abbrv}} - {{root.str}} {{chord_type.type}}</a></li>
             {% endfor %}
         </ul>
     </div>
