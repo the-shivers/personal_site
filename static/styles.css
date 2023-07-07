@@ -312,6 +312,10 @@ button, select {
   width: 150px
 }
 
+.strumpeggio {
+  width: 150px
+}
+
 .sectionContainer {
   background-color: #E7DECD;
   color: #130400;
@@ -346,3 +350,4 @@ button, select {
 .moreOrLess:hover {
   color: #130400;
 }
+

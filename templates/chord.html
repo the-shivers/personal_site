@@ -1,7 +1,6 @@
 <html>
 <head>
     <title>{{ chord_data[0].root_note }}{{ chord_data[0].chord_text_abbrv }}</title>
-    <script type="module" src="/static/chord.js"></script>
     <script type="module" src="/static/chordbox.js"></script>
     <script src="https://unpkg.com/vexflow@4.0.1/build/cjs/vexflow-debug.js"></script>
     <link href="/static/styles.css" rel="stylesheet">
@@ -59,6 +58,9 @@
     </div>
     <hr>
     <div id="copy"><p id="copy_p"></p></div>
+    <button class="strumpeggio" id="playButton">Loading...</button>
+    <button class="strumpeggio" id="playButton2">Loading...</button>
+    <button class="strumpeggio" id="playButton3">Loading...</button>
     <script type="module">
         let index = 0;
         let full_chord_data = {{ chord_data|tojson }};
@@ -108,7 +110,146 @@
             }
             return return_list.join(', ')
         }
+
+        const playButton = document.getElementById('playButton');
+        const playButton2 = document.getElementById('playButton2');
+        const playButton3 = document.getElementById('playButton3');
+        var audioFiles = [
+            'a4-a4.mp3',
+            'a4-as4.mp3',
+            'a4-b4.mp3',
+            'a4-c5.mp3',
+            'a4-cs5.mp3',
+            'a4-d5.mp3',
+            'a4-ds5.mp3',
+            'a4-e5.mp3',
+            'a4-f5.mp3',
+            'a4-fs5.mp3',
+            'a4-g5.mp3',
+            'a4-gs5.mp3',
+            'a4-a5.mp3',
+            'a4-as5.mp3',
+            'a4-b5.mp3',
+            'a4-c6.mp3',
+            'a4-cs6.mp3',
+            'a4-d6.mp3',
+            'c4-c4.mp3',
+            'c4-cs4.mp3',
+            'c4-d4.mp3',
+            'c4-ds4.mp3',
+            'c4-e4.mp3',
+            'c4-f4.mp3',
+            'c4-fs4.mp3',
+            'c4-g4.mp3',
+            'c4-gs4.mp3',
+            'c4-a4.mp3',
+            'c4-as4.mp3',
+            'c4-b4.mp3',
+            'c4-c5.mp3',
+            'c4-cs5.mp3',
+            'c4-d5.mp3',
+            'c4-ds5.mp3',
+            'c4-e5.mp3',
+            'e4-e4.mp3',
+            'e4-f4.mp3',
+            'e4-fs4.mp3',
+            'e4-g4.mp3',
+            'e4-gs4.mp3',
+            'e4-a4.mp3',
+            'e4-as4.mp3',
+            'e4-b4.mp3',
+            'e4-c5.mp3',
+            'e4-cs5.mp3',
+            'e4-d5.mp3',
+            'e4-ds5.mp3',
+            'e4-e5.mp3',
+            'e4-f5.mp3',
+            'e4-fs5.mp3',
+            'e4-g5.mp3',
+            'e4-gs5.mp3',
+            'g3-g3.mp3',
+            'g3-gs3.mp3',
+            'g3-a3.mp3',
+            'g3-as3.mp3',
+            'g3-b3.mp3',
+            'g3-c4.mp3',
+            'g3-cs4.mp3',
+            'g3-d4.mp3',
+            'g3-ds4.mp3',
+            'g3-e4.mp3',
+            'g3-f4.mp3',
+            'g3-fs4.mp3',
+            'g3-g4.mp3',
+            'g3-gs4.mp3',
+            'g3-a4.mp3',
+            'g3-as4.mp3',
+            'g3-b4.mp3',
+            'g3-c5.mp3'
+        ];
+        var audioObjects = {};
+        var currentSoundFiles = []
+
+        Promise.all(audioFiles.map(fileName => loadAudioFile(fileName, () => { })))
+            .then(() => console.log('All files loaded'))
+            .catch((err) => console.error('Error loading files', err));
         
+        function playSound(sound_type) {
+            var allLoaded = currentSoundFiles.every(file => audioObjects[file])
+            if (allLoaded) {
+                currentSoundFiles.forEach(file => {
+                    if (!audioObjects[file].paused) {
+                        audioObjects[file].pause();
+                        audioObjects[file].currentTime = 0; // rewind the audio
+                    }
+                })         
+                if (sound_type == 'strum')  {
+                    let delay_between_strums = 0.05 // time in seconds
+                    setTimeout(function() {audioObjects[currentSoundFiles[0]].play()}, delay_between_strums * 1000 * 0);
+                    setTimeout(function() {audioObjects[currentSoundFiles[1]].play()}, delay_between_strums * 1000 * 1);
+                    setTimeout(function() {audioObjects[currentSoundFiles[2]].play()}, delay_between_strums * 1000 * 2);
+                    setTimeout(function() {audioObjects[currentSoundFiles[3]].play()}, delay_between_strums * 1000 * 3);
+                } else if (sound_type == 'bossa') {
+                    let delay_between_strums = 0.2 // time in seconds
+                    setTimeout(function() {audioObjects[currentSoundFiles[0]].play()}, delay_between_strums * 1000 * 0);
+                    setTimeout(function() {audioObjects[currentSoundFiles[1]].play()}, delay_between_strums * 1000 * 0);
+                    setTimeout(function() {audioObjects[currentSoundFiles[2]].play()}, delay_between_strums * 1000 * 0);
+                    setTimeout(function() {audioObjects[currentSoundFiles[3]].play()}, delay_between_strums * 1000 * 0);
+                    setTimeout(function() {audioObjects[currentSoundFiles[1]].pause(); audioObjects[currentSoundFiles[1]].currentTime = 0; audioObjects[currentSoundFiles[1]].play()}, delay_between_strums * 1000 * 2);
+                    setTimeout(function() {audioObjects[currentSoundFiles[2]].pause(); audioObjects[currentSoundFiles[2]].currentTime = 0; audioObjects[currentSoundFiles[2]].play()}, delay_between_strums * 1000 * 2)
+                    setTimeout(function() {audioObjects[currentSoundFiles[3]].pause(); audioObjects[currentSoundFiles[3]].currentTime = 0; audioObjects[currentSoundFiles[3]].play()}, delay_between_strums * 1000 * 2)
+                    setTimeout(function() {audioObjects[currentSoundFiles[0]].pause(); audioObjects[currentSoundFiles[0]].currentTime = 0; audioObjects[currentSoundFiles[0]].play()}, delay_between_strums * 1000 * 4);
+                    setTimeout(function() {audioObjects[currentSoundFiles[1]].pause(); audioObjects[currentSoundFiles[1]].currentTime = 0; audioObjects[currentSoundFiles[1]].play()}, delay_between_strums * 1000 * 5);
+                    setTimeout(function() {audioObjects[currentSoundFiles[2]].pause(); audioObjects[currentSoundFiles[2]].currentTime = 0; audioObjects[currentSoundFiles[2]].play()}, delay_between_strums * 1000 * 5);
+                    setTimeout(function() {audioObjects[currentSoundFiles[3]].pause(); audioObjects[currentSoundFiles[3]].currentTime = 0; audioObjects[currentSoundFiles[3]].play()}, delay_between_strums * 1000 * 5);
+                } else {
+                    let delay_between_strums = 0.5 // time in seconds
+                    setTimeout(function() {audioObjects[currentSoundFiles[0]].play()}, delay_between_strums * 1000 * 0);
+                    setTimeout(function() {audioObjects[currentSoundFiles[1]].play()}, delay_between_strums * 1000 * 1);
+                    setTimeout(function() {audioObjects[currentSoundFiles[2]].play()}, delay_between_strums * 1000 * 2);
+                    setTimeout(function() {audioObjects[currentSoundFiles[3]].play()}, delay_between_strums * 1000 * 3);
+                }
+                
+            } else {
+                console.log('Some or all of the sound files have not been preloaded yet');
+            }
+        }
+
+        function loadAudioFile(fileName, onComplete = () => { }) {
+            return new Promise((resolve, reject) => {
+                // var audio = new Audio('/media/opio_low_g_factory_small_mp3/' + fileName);
+                var audio = new Audio('/media/silenced_mp3s/' + fileName);
+                const canPlayThrough = () => {
+                    resolve();
+                    onComplete();
+                    audio.removeEventListener('canplaythrough', canPlayThrough);
+                    audio.preload;
+                };
+                audio.onerror = reject;
+                audio.addEventListener('canplaythrough', canPlayThrough);
+                audioObjects[fileName] = audio;
+            });
+        }
+
         function update_all(index) {
             let chord_data = full_chord_data[index]
 
@@ -190,10 +331,39 @@
             const title = '';
             const url = `?id=${chord_data.id}`;
             window.history.pushState(newState, title, url);
+
+            // Sound
+            playButton.textContent = 'Loading...';
+            playButton2.textContent = 'Loading...';
+            playButton3.textContent = 'Loading...';
+            currentSoundFiles = []
+            if (chord_data.abs_note1) {
+                currentSoundFiles.push(`${chord_data.str1.toLowerCase()}-${chord_data.abs_note1.toLowerCase().replace('#', 's')}.mp3`)
+            }
+            if (chord_data.abs_note2) {
+                currentSoundFiles.push(`${chord_data.str2.toLowerCase()}-${chord_data.abs_note2.toLowerCase().replace('#', 's')}.mp3`)
+            }
+            if (chord_data.abs_note3) {
+                currentSoundFiles.push(`${chord_data.str3.toLowerCase()}-${chord_data.abs_note3.toLowerCase().replace('#', 's')}.mp3`)
+            }
+            if (chord_data.abs_note4) {
+                currentSoundFiles.push(`${chord_data.str4.toLowerCase()}-${chord_data.abs_note4.toLowerCase().replace('#', 's')}.mp3`)
+            }
+            let soundsToLoad = currentSoundFiles.length;
+            currentSoundFiles.forEach(file => {
+                loadAudioFile(file, () => {  // Second argument here is `onComplete`
+                    soundsToLoad--;
+                    if (soundsToLoad === 0) {
+                    playButton.textContent = 'Strum';
+                    playButton2.textContent = 'Arpeggio';
+                    playButton3.textContent = 'Bossa';
+                    }
+                });
+            });
+
         }
 
         // Populating and creating event listeners
-
 
         // First, find out if strum exists (if not, updateall 0 )
         // If it exists, check if its in the full chord data. If not, updateall 0.
@@ -206,7 +376,6 @@
             let ind = full_chord_data.findIndex(x => x.id == {{id}});
             update_all( ind );
         }
-
 
         const nextButton = document.getElementById('next_button');
         nextButton.addEventListener('click', async () => {
@@ -224,7 +393,9 @@
             update_all(index);
         });
 
-        
+        playButton.addEventListener('click', function() { playSound('strum') });
+        playButton2.addEventListener('click', function() { playSound('arpeggio') });
+        playButton3.addEventListener('click', function() { playSound('bossa') });
 
     </script>
 </body>
